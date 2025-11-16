@@ -1,4 +1,7 @@
 const round = n => Math.round(n * 10) / 10
+// Check for timestamp line (00:00:00.000 --> 00:00:00.000) or 21:12.013
+const timestamp = /\d{2}(?:[:\.]\d{2,4})*/
+const hasArrow = /-->/;
 
 // Parse a timestamp string (HH:MM:SS.mmm) into seconds
 function parseTimestamp(timestamp) {
@@ -7,13 +10,16 @@ function parseTimestamp(timestamp) {
   const minutes = parseInt(parts[1], 10);
 
   // Handle seconds and milliseconds
-  const secondParts = parts[2].split('.');
-  const seconds = parseInt(secondParts[0], 10);
-  const milliseconds = parseInt(secondParts[1], 10);
-
-  // Round to 2 decimal places
-  let secs = hours * 3600 + minutes * 60 + seconds + milliseconds / 1000
-  return round(secs)
+  let seconds = 0;
+  let milliseconds = 0;
+  if (parts[2]) {
+    const secondParts = parts[2].split('.');
+    seconds = parseInt(secondParts[0], 10);
+    if (secondParts[1]) {
+      milliseconds = parseInt(secondParts[1], 10);
+    }
+  }
+  return hours * 3600 + minutes * 60 + seconds + milliseconds / 1000
 }
 
 // Parse VTT content into a structured array of subtitle entries
@@ -38,18 +44,17 @@ const parseVTT = function (vttContent) {
       continue;
     }
 
-    // Check for timestamp line (00:00:00.000 --> 00:00:00.000)
-    const timestampMatch = line.match(/(\d{2}:\d{2}:\d{2}\.\d{3})\s+-->\s+(\d{2}:\d{2}:\d{2}\.\d{3})/);
 
-    if (timestampMatch) {
+    if (hasArrow.test(line) && timestamp.test(line)) {
       // If we were collecting text, finalize the previous entry
       if (collectingText && currentEntry) {
         entries.push(currentEntry);
       }
 
       // Parse start and end times
-      const startTime = parseTimestamp(timestampMatch[1]);
-      const endTime = parseTimestamp(timestampMatch[2]);
+      let [startTime, endTime] = line.split('-->');
+      startTime = parseTimestamp(startTime.trim());
+      endTime = parseTimestamp(endTime.trim());
 
       // Create new entry
       currentEntry = {

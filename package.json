@@ -4,7 +4,8 @@
   "description": "utility for managing subtitles in vtt format",
   "scripts": {
     "build": "rollup -c --silent",
-    "test": "node --test --test-reporter=spec tests/*.test.js"
+    "test": "node --test --test-reporter=spec tests/*.test.js",
+    "watch": "node --watch scratch.js"
   },
   "bin": {
     "vttpeg": "cli/bin.js"

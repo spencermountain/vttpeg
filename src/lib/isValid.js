@@ -1,3 +1,4 @@
+
 const isValid = (entries, opts = {}) => {
   opts.silent = opts.silent || false
   let errors = []
@@ -15,8 +16,10 @@ const isValid = (entries, opts = {}) => {
   }
   if (errors.length > 0) {
     if (!opts.silent) {
+      console.log('\n\n--------------------------------')
       console.log(`Validation errors: `)
       console.log(errors)
+      console.log('--------------------------------\n\n')
     }
     return false
   }

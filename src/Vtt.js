@@ -1,4 +1,4 @@
-import parseVTT from './parse.js'
+import parse from './parse.js'
 import findGaps from './lib/gaps.js'
 import getStats from './lib/stats.js'
 import shift from './lib/shift.js'
@@ -6,8 +6,8 @@ import lint from './lib/lint.js'
 import isValid from './lib/isValid.js'
 
 class Vtt {
-  constructor(str) {
-    this.entries = parseVTT(str)
+  constructor(txt = '') {
+    this.entries = parse(txt)
   }
   json() {
     return this.entries

@@ -1,16 +1,21 @@
-import vttpeg from './src/index.js'
+import vttpeg from './src/_server.js'
 
-const txt = `
+const dir = '/Users/spencer/Desktop/subtitles/Simpsons Subtitles/S02'
+const file = '/Users/spencer/Desktop/subtitles/Simpsons Subtitles/S02/2x06 - Dead Putting Society.vtt'
 
-WEBVTT
+const vtt = vttpeg.fromFile(file)
+console.log(vtt.isValid())
+console.log(vtt.lint())
+// console.log(vtt.json())
 
-00:00:00.000 --> 00:00:00.000
-Hello, world!
+// const txt = `
 
-00:00:00.000 --> 00:00:00.000
-Hello, world!
-`
+// WEBVTT
 
-const vtt = vttpeg(txt)
+// 00:00:00.000 --> 00:00:00.000
+// Hello, world!
 
-console.log(vtt.json())
+// 00:00:00.000 --> 00:00:00.000
+// Hello, world!
+// `
+// const vtt = vttpeg(txt)
