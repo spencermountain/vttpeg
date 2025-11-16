@@ -1,6 +1,6 @@
 // find suspicious entries in the vtt file
 const lint = (entries, opts = {}) => {
-  let { verbose = false } = opts
+  opts.silent = opts.silent || false
   let errors = []
   for (let i = 0; i < entries.length; i += 1) {
     let entry = entries[i]
@@ -16,14 +16,15 @@ const lint = (entries, opts = {}) => {
 
   }
   if (errors.length > 0) {
-    if (verbose) {
+    if (!opts.silent) {
       console.log(`Lint errors: `)
       console.log(errors)
     }
   } else {
-    console.log('No lint errors found')
-    return true
+    if (!opts.silent) {
+      console.log('No lint errors found')
+    }
   }
-  return false
+  return errors
 }
 export default lint

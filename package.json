@@ -3,12 +3,16 @@
   "version": "0.0.1",
   "description": "utility for managing subtitles in vtt format",
   "scripts": {
-    "build": "npm run pack && npm run version && rollup -c --silent",
-    "lint": "eslint ./src"
+    "build": "rollup -c --silent",
+    "test": "node --test --test-reporter=spec tests/*.test.js"
   },
   "bin": {
     "vttpeg": "cli/bin.js"
   },
+  "main": "builds/vttpeg.mjs",
+  "module": "builds/vttpeg.mjs",
+  "unpkg": "builds/vttpeg.mjs",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/spencermountain/vttpeg.git"
@@ -24,12 +28,15 @@
     "singleQuote": true,
     "printWidth": 100
   },
-  "devDependencies": {
-    "rollup": "4.52.3"
-  },
-  "license": "MIT",
   "dependencies": {
-    "glob": "^11.0.3",
-    "yargs": "^18.0.0"
-  }
+    "glob": "11.0.3",
+    "yargs": "18.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "29.0.0",
+    "@rollup/plugin-json": "6.1.0",
+    "@rollup/plugin-node-resolve": "16.0.3",
+    "@rollup/plugin-terser": "0.4.4"
+  },
+  "license": "MIT"
 }

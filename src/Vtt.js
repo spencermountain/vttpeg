@@ -3,6 +3,7 @@ import findGaps from './lib/gaps.js'
 import getStats from './lib/stats.js'
 import shift from './lib/shift.js'
 import lint from './lib/lint.js'
+import isValid from './lib/isValid.js'
 
 class Vtt {
   constructor(str) {
@@ -14,13 +15,7 @@ class Vtt {
   text() {
     return this.entries.map(entry => entry.text).join('\n')
   }
-  stats() {
-    return getStats(this.entries)
-  }
-  lint(opts = {}) {
-    return lint(this.entries, opts)
-  }
-  printVtt() {
+  out() {
     return this.entries.map(entry => entry.text).join('\n')
   }
   debug() {
@@ -28,6 +23,17 @@ class Vtt {
     console.log(this.entries)
     console.log(this.stats())
     console.log('--------------------------------')
+  }
+
+  // run analyses on the vtt file
+  stats() {
+    return getStats(this.entries)
+  }
+  lint(opts = {}) {
+    return lint(this.entries, opts)
+  }
+  isValid(opts = {}) {
+    return isValid(this.entries, opts)
   }
 
 
