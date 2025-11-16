@@ -109,16 +109,18 @@ vtt.debug()
 ### CLI usage
 accepts a file, directory, or glob pattern
 ```bash
-vttpeg --shift=10 ./subtitles/*.vtt
+npm install -g vttpeg
 
-vttpeg --lint ./subtitles/*.vtt
+vttpeg --shift=10 './subtitles/*.vtt'
+
+vttpeg --lint ./mySubtitle.vtt
 ```
 
 by default, the files are written with a `'_new'` suffix - you can change this behaviour with the `-append` option or the `--rewrite` option.
 ```bash
-vttpeg --shift=-5 --append=_shift ./mySubtitle.vtt # (mySubtitle_shift.vtt)
+vttpeg --shift=-5 --append=_shift './mySubtitle.vtt' # (mySubtitle_shift.vtt)
 
-vttpeg --lint --rewrite ./mySubtitle.vtt  #(rewrites the file in place)
+vttpeg --lint --rewrite './mySubtitle.vtt'  #(rewrites the file in place)
 ```
 
 
