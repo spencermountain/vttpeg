@@ -15,7 +15,39 @@
 <img height="50px" src="https://user-images.githubusercontent.com/399657/68221862-17ceb980-ffb8-11e9-87d4-7b30b6488f16.png"/>
 
 
-### Usage
+Video subtitles come in a variety of formats, the only format supported by web browsers is **VTT**.
+
+They can be added to a video like this:
+```html
+<video controls src="myVideo.mp4">
+  <track default kind="captions" src="mySubtitles.vtt" srclang="en" />
+</video>
+```
+
+The VTT format is kinda cool - the subtitles are editable in a text editor.
+
+They look like this:
+```vtt
+WEBVTT
+
+00:00:00.000 --> 00:00:00.000
+It was the best of times, 
+
+00:00:01.000 --> 00:00:02.000
+it was the worst of times...
+```
+
+There are some gotchas with the VTT format - 
+* webvtt tracks aren't writable
+* sometimes the timestamps are shifted by an annoying few seconds
+* some 3rd party services add cruft to the vtt file
+* sometimes the subtitles are not in the correct order
+* variety of styles for line breaks and other formatting
+* variety of styles for describing non-dialogue sounds
+
+This library helps you easily manipulate VTT files in Node.js and the browser.
+
+### Node Usage
 `npm install vttpeg`
 
 ```js
@@ -47,7 +79,15 @@ vtt.debug()
 
 ```
 
-### CLI
+### Browser Usage
+```html
+<script src="https://unpkg.com/vttpeg"></script>
+<script>
+  const vtt = vttpeg(txt)
+</script>
+```
+
+### CLI usage
 ```bash
 vttpeg "./subtitles/*.vtt" --shift 10
 
@@ -63,7 +103,7 @@ vttpeg "./mySubtitle.vtt" --rewrite #rewrites the files in place
 
 ---
 
-convert a subtitle into VTT format with `ffmpeg`:
+any subtitle format can be converted into VTT format with [ffmpeg](https://www.ffmpeg.org/):
 ```bash
 ffmpeg -i "mySubtitle.srt" "output.vtt"
 ```
