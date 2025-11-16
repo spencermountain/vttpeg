@@ -4,8 +4,8 @@ import vttpeg from '../src/index.js';
 
 test('smoke-test', (t) => {
   assert.strictEqual(true, true, 'true is true')
-  let text = `
-WEBVTT
+  let text = `WEBVTT
+
 00:00:00.000 --> 00:00:00.000
 Hello, world!
 
@@ -13,10 +13,12 @@ Hello, world!
 Hello, world 2!
 
 00:00:05.000 --> 00:00:07.000
-Hello, world 3!
-  `
+Hello, world 3!`
   let vtt = vttpeg(text)
   assert.strictEqual(vtt.json().length, 3, '3 entries')
+
+  // input==output
+  assert.strictEqual(vtt.out(), text, 'out is text')
 
   let output = `Hello, world!
 Hello, world 2!

@@ -1,5 +1,5 @@
 import parse from './parse/index.js'
-import findGaps from './lib/gaps.js'
+import findGaps from './lib/scenes.js'
 import getStats from './lib/stats.js'
 import shift from './lib/shift.js'
 import lint from './lib/lint.js'
@@ -15,7 +15,12 @@ class Vtt {
     return this.entries
   }
   text() {
-    return this.entries.map(entry => entry.text).join('\n')
+    return this.entries.map(entry => entry.text.join('\n')).join('\n')
+  }
+  plainText() {
+    return this.entries.map(entry => {
+      return entry.text.map(txt => stripXml(txt)).join('\n')
+    }).join('\n')
   }
   out() {
     return out(this.entries)
@@ -29,7 +34,11 @@ class Vtt {
 
   // run analyses on the vtt file
   stats() {
-    return getStats(this.entries)
+    let stats = getStats(this.entries)
+    let words = this.text().split(' ').length
+    stats.wordCount = words
+    stats.wordsPerMinute = parseInt(words / stats.duration * 60, 10)
+    return stats
   }
   lint(opts = {}) {
     return lint(this.entries, opts)
@@ -82,17 +91,17 @@ class Vtt {
   }
 
   // detect silences
-  gaps() {
-    return findGaps(this.entries)
+  sceneSplit(minGap = 2) {
+    return findGaps(this.entries, minGap)
   }
-  firstEntry() {
+  firstCue() {
     return this.entries[0]
   }
-  lastEntry() {
+  lastCue() {
     return this.entries[this.entries.length - 1]
   }
   duration() {
-    return this.lastEntry().endTime - this.firstEntry().startTime
+    return this.lastCue().endTime - this.firstCue().startTime
   }
 
 }

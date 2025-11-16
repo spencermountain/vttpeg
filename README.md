@@ -101,6 +101,40 @@ vtt.debug()
 
 ```
 
+### API
+
+<!-- * `vtt.entries` - get the entries of the vtt file -->
+* `vtt.json()` - get the cues as a json array
+* `vtt.text()` - get the raw text as a string
+* `vtt.plainText()` - get the cleaned-up plain text
+* `vtt.out()` - get the vtt file as a string
+<!-- * `vtt.debug()` - debug the vtt file -->
+
+analyses:
+* `vtt.stats()` - get the stats of the vtt file
+* `vtt.lint()` - lint the vtt file
+* `vtt.isValid()` - check if the vtt file is valid
+
+text manipulations:
+* `vtt.stripVoice()` - remove all voice tags from the text
+* `vtt.stripLang()` - remove all language tags from the text
+* `vtt.stripXml()` - remove all xml tags from the text
+* `vtt.stripStyle()` - remove display attributes from cues (align, size, position, etc)
+
+timestamp manipulations:
+* `vtt.shift(seconds)` - shift the timestamps forward or backward
+* `vtt.shiftLeft(seconds)` - shift the timestamps left
+* `vtt.shiftRight(seconds)` - shift the timestamps right
+* `vtt.sort()` - ensure all cues are sorted by start time
+
+utils:
+* `vtt.firstEntry()` - get the first entry
+* `vtt.lastEntry()` - get the last entry
+* `vtt.duration()` - get the duration of the vtt file
+
+* `vtt.sceneSplit(minGap = 2)` - split cues into sections based on gaps between cues
+
+
 ### Browser Usage
 ```html
 <script src="https://unpkg.com/vttpeg"></script>

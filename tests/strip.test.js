@@ -28,16 +28,24 @@ NOTE he says this in the intro
   assert.strictEqual(vtt.isValid(), true, 'is valid')
   assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
+  let firstOut = `<v Roger Bingham>from the American Museum of Natural History
+<v Roger Bingham>And with me is Neil deGrasse Tyson
+<v Roger Bingham>Astrophysicist, Director of the Hayden Planetarium
+<v Roger Bingham>at the AMNH.
+<v Roger Bingham>Thank you for walking down here.`
+  assert.strictEqual(vtt.text(), firstOut, 'text is text')
+
+
   vtt.stripVoice()
   assert.strictEqual(vtt.json().length, 5, '5 entries')
   assert.strictEqual(vtt.isValid(), true, 'is valid')
   assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
-  let output = `from the American Museum of Natural History
+  let secondOut = `from the American Museum of Natural History
 And with me is Neil deGrasse Tyson
 Astrophysicist, Director of the Hayden Planetarium
 at the AMNH.
 Thank you for walking down here.`
-  assert.strictEqual(vtt.text(), output, 'text is text')
+  assert.strictEqual(vtt.text(), secondOut, 'text is text')
 })
 

@@ -1,13 +1,16 @@
 const getStats = (entries) => {
-  let text = entries.map(entry => entry.text.join('\n')).join('\n')
-  let words = text.split(' ').length
   let duration = entries.reduce((acc, entry) => acc + entry.endTime - entry.startTime, 0)
+
+  let shortestCue = entries.reduce((acc, entry) => acc < entry.endTime - entry.startTime ? acc : entry.endTime - entry.startTime, entries[0].endTime - entries[0].startTime)
+  let longestCue = entries.reduce((acc, entry) => acc > entry.endTime - entry.startTime ? acc : entry.endTime - entry.startTime, entries[0].endTime - entries[0].startTime)
+  let averageCue = duration / entries.length
 
   return {
     duration: duration,
-    entries: entries.length,
-    wordCount: words,
-    wordsPerMinute: (words / duration * 60),
+    cues: entries.length,
+    shortestCue: shortestCue,
+    longestCue: longestCue,
+    averageCue: averageCue,
   }
 }
 

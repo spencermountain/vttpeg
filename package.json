@@ -1,6 +1,6 @@
 {
   "name": "vttpeg",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "utility for managing subtitles in vtt format",
   "scripts": {
     "build": "rollup -c --silent",
