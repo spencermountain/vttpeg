@@ -89,7 +89,7 @@ vtt.stats()
 // cleanup any awkward entries
 vtt.lint({silent : false})
 // detect silences
-let gaps = vtt.gaps()
+let scenes = vtt.sceneSplit()
 
 // outputs for the vtt file
 vtt.printVtt()
@@ -155,11 +155,11 @@ vttpeg --shift=10 './subtitles/*.vtt'
 vttpeg --lint ./mySubtitle.vtt
 ```
 
-by default, the files are written with a `'_new'` suffix - you can change this behaviour with the `-append` option or the `--rewrite` option.
+by default, the files are written with a `'_new'` suffix - you can change this behaviour with the `-append` option or the `--overwrite` option.
 ```bash
 vttpeg --shift=-5 --append=_shift './mySubtitle.vtt' # (mySubtitle_shift.vtt)
 
-vttpeg --lint --rewrite './mySubtitle.vtt'  #(rewrites the file in place)
+vttpeg --lint --overwrite './mySubtitle.vtt'  #(rewrites the file in place)
 ```
 
 
