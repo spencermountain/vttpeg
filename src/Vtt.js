@@ -5,6 +5,7 @@ import shift from './lib/shift.js'
 import lint from './lib/lint.js'
 import isValid from './lib/isValid.js'
 import out from './lib/out.js'
+import { stripXml, stripVoice, stripLang } from './lib/xml.js'
 
 class Vtt {
   constructor(txt = '') {
@@ -37,6 +38,34 @@ class Vtt {
     return isValid(this.entries, opts)
   }
 
+  // remove xml attributes
+  stripXml() {
+    this.entries = this.entries.map(entry => {
+      entry.text = entry.text.map(txt => stripXml(txt))
+      return entry
+    })
+    return this
+  }
+  stripVoice() {
+    this.entries = this.entries.map(entry => {
+      entry.text = entry.text.map(txt => stripVoice(txt))
+      return entry
+    })
+    return this
+  }
+  stripLang() {
+    this.entries = this.entries.map(entry => {
+      entry.text = entry.text.map(txt => stripLang(txt))
+      return entry
+    })
+    return this
+  }
+  stripStyle() {
+    return this.entries.map(entry => {
+      delete entry.attributes
+      return entry
+    })
+  }
 
   // move timestamps forward or backward
   shift(seconds) {
