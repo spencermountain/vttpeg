@@ -30,14 +30,9 @@
 <img height="50px" src="https://user-images.githubusercontent.com/399657/68221862-17ceb980-ffb8-11e9-87d4-7b30b6488f16.png"/>
 
 
-Video subtitles come in a variety of formats, the only format supported by web browsers is **VTT**.
+### About
+Subtitles come in a variety of formats, the only format supported in web browsers is **[VTT](https://en.wikipedia.org/wiki/WebVTT)**.
 
-They can be added to a video like this:
-```html
-<video controls src="myVideo.mp4">
-  <track default kind="captions" src="mySubtitles.vtt" srclang="en" />
-</video>
-```
 
 The VTT format is kinda cool - the subtitles are editable in a text editor.
 
@@ -51,6 +46,14 @@ It was the best of times,
 00:00:01.000 --> 00:00:02.000
 it was the worst of times...
 ```
+
+They can be added to a webpage like this:
+```html
+<video controls src="myVideo.mp4">
+  <track default kind="captions" src="mySubtitles.vtt" srclang="en" />
+</video>
+```
+
 
 There are some gotchas with the VTT format - 
 * webvtt tracks aren't writable
