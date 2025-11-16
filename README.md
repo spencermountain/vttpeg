@@ -61,6 +61,7 @@ There are some gotchas with the VTT format -
 * some 3rd party services add cruft to the vtt file
 * sometimes the subtitles are not in the correct order
 * variety of styles for line breaks and other formatting
+* variety of styles for pacing and lumping of dialogue
 * variety of styles for describing non-dialogue sounds
 
 This library helps you easily manipulate VTT files in Node.js and the browser.
@@ -106,16 +107,18 @@ vtt.debug()
 ```
 
 ### CLI usage
+accepts a file, directory, or glob pattern
 ```bash
-vttpeg "./subtitles/*.vtt" --shift 10
+vttpeg --shift=10 ./subtitles/*.vtt
 
-vttpeg "./subtitles/*.vtt" --lint
+vttpeg --lint ./subtitles/*.vtt
 ```
 
-by default, the new files with a _new suffix are created. You can change this with the `-append` option or the `--rewrite` option.
+by default, the files are written with a `'_new'` suffix - you can change this behaviour with the `-append` option or the `--rewrite` option.
 ```bash
-vttpeg "./mySubtitle.vtt" --append "_shifted"
-vttpeg "./mySubtitle.vtt" --rewrite #rewrites the files in place
+vttpeg --shift=-5 --append=_shift ./mySubtitle.vtt # (mySubtitle_shift.vtt)
+
+vttpeg --lint --rewrite ./mySubtitle.vtt  #(rewrites the file in place)
 ```
 
 
@@ -125,5 +128,12 @@ any subtitle format can be converted into VTT format with [ffmpeg](https://www.f
 ```bash
 ffmpeg -i "mySubtitle.srt" "output.vtt"
 ```
+
+you can extract vtt subtitles from some video files (`mkv/mov/webm/etc`) with:
+```bash
+ffmpeg './myVideo.mkv' -map 0:s:0 'mySubtitle.vtt'
+```
+
+
 
 MIT

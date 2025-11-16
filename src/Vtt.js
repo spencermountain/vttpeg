@@ -29,6 +29,8 @@ class Vtt {
     console.log(this.stats())
     console.log('--------------------------------')
   }
+
+
   // move timestamps forward or backward
   shift(seconds) {
     return shift(this.entries, seconds)
@@ -39,10 +41,22 @@ class Vtt {
   shiftRight(seconds) {
     return shift(this.entries, seconds)
   }
+  sort() {
+    return this.entries.sort((a, b) => a.startTime - b.startTime)
+  }
 
   // detect silences
   gaps() {
     return findGaps(this.entries)
+  }
+  firstEntry() {
+    return this.entries[0]
+  }
+  lastEntry() {
+    return this.entries[this.entries.length - 1]
+  }
+  duration() {
+    return this.lastEntry().endTime - this.firstEntry().startTime
   }
 
 }
