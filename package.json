@@ -9,7 +9,7 @@
   "bin": {
     "vttpeg": "cli/bin.js"
   },
-  "main": "builds/vttpeg.mjs",
+  "main": "src/_server.js",
   "module": "builds/vttpeg.mjs",
   "unpkg": "builds/vttpeg.mjs",
   "type": "module",
@@ -21,6 +21,9 @@
     "src",
     "builds"
   ],
+  "engines": {
+    "node": ">=20"
+  },
   "prettier": {
     "trailingComma": "none",
     "tabWidth": 2,

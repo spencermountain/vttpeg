@@ -10,7 +10,7 @@ const banner = `/* ${name} ${pkg.version} MIT */`
 
 export default [
   {
-    input: 'src/index.js',
+    input: 'src/_client.js',
     output: [
       {
         file: `builds/${name}.mjs`,
@@ -22,27 +22,11 @@ export default [
       resolve(),
       json(),
       commonjs(),
+      terser(),
     ],
   },
   {
-    input: 'src/index.js',
-    output: [
-      {
-        file: `builds/${name}.js`,
-        format: 'umd',
-        sourcemap: false,
-        name,
-        banner: banner,
-      },
-    ],
-    plugins: [
-      resolve(),
-      json(),
-      commonjs(),
-    ],
-  },
-  {
-    input: 'src/index.js',
+    input: 'src/_client.js',
     output: [
       {
         file: `builds/${name}.min.js`,

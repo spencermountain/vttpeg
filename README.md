@@ -30,10 +30,10 @@
 <img height="50px" src="https://user-images.githubusercontent.com/399657/68221862-17ceb980-ffb8-11e9-87d4-7b30b6488f16.png"/>
 
 
-Subtitles come in a variety of formats, the only format supported in web browsers is **[VTT](https://en.wikipedia.org/wiki/WebVTT)**.
+Subtitles come in a wide variety of formats, but the only format supported by web browsers is **[VTT](https://en.wikipedia.org/wiki/WebVTT)**.
 
 
-The VTT format is kinda cool - the subtitles are editable in a text editor.
+The VTT format is kinda cool - you can edit them in a text editor.
 
 They look like this:
 ```vtt
@@ -72,8 +72,10 @@ This library helps you easily manipulate VTT files in Node.js and the browser.
 import vttpeg from 'vttpeg'
 import fs from 'fs'
 
-const txt = fs.readFileSync('mySubtitle.vtt', 'utf8')
+const txt = fs.readFileSync('mySubtitle.vtt')
 const vtt = vttpeg(txt)
+// in node you can also use:
+const vtt = vttpeg.fromFile('mySubtitle.vtt')
 
 // manipulate the timings
 vtt.shift(10)
@@ -101,7 +103,9 @@ vtt.debug()
 ```html
 <script src="https://unpkg.com/vttpeg"></script>
 <script>
-  const vtt = vttpeg(txt)
+  const el = document.querySelector('video') //first video
+  const vtt = vttpeg.fromElement(el)
+  console.log(vtt.json())
 </script>
 ```
 
