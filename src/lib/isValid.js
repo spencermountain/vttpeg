@@ -7,8 +7,11 @@ const isValid = (entries, opts = {}) => {
   }
   for (let i = 0; i < entries.length; i += 1) {
     let entry = entries[i]
-    if (!entry.startTime || !entry.endTime) {
-      errors.push(`Invalid start or end time for entry ${i}`)
+    if (typeof entry.startTime != 'number' || entry.startTime < 0) {
+      errors.push(`Invalid start time for entry ${i}`)
+    }
+    if (typeof entry.endTime != 'number' || entry.endTime < 0) {
+      errors.push(`Invalid end time for entry ${i}`)
     }
     if (entry.startTime >= entry.endTime) {
       errors.push(`Start time is greater than end time for entry ${i}`)

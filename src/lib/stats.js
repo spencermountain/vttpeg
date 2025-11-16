@@ -1,12 +1,13 @@
 const getStats = (entries) => {
-  let words = entries.reduce((acc, entry) => acc + entry.text.split(' ').length, 0)
+  let text = entries.map(entry => entry.text.join('\n')).join('\n')
+  let words = text.split(' ').length
   let duration = entries.reduce((acc, entry) => acc + entry.endTime - entry.startTime, 0)
 
   return {
-    duration: duration.toFixed(2),
+    duration: duration,
     entries: entries.length,
     wordCount: words,
-    wordsPerMinute: (words / duration * 60).toFixed(2),
+    wordsPerMinute: (words / duration * 60),
   }
 }
 

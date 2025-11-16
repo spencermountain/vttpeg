@@ -4,6 +4,7 @@ import getStats from './lib/stats.js'
 import shift from './lib/shift.js'
 import lint from './lib/lint.js'
 import isValid from './lib/isValid.js'
+import out from './lib/out.js'
 
 class Vtt {
   constructor(txt = '') {
@@ -16,7 +17,7 @@ class Vtt {
     return this.entries.map(entry => entry.text).join('\n')
   }
   out() {
-    return this.entries.map(entry => entry.text).join('\n')
+    return out(this.entries)
   }
   debug() {
     console.log('--------------------------------')
