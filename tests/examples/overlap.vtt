@@ -1,0 +1,20 @@
+WEBVTT
+Kind: captions
+Language: en
+
+NOTE
+This file demonstrates comments and overlapping cues.
+A parser should ignore this NOTE block.
+
+00:00:02.000 --> 00:00:05.000
+This cue appears first.
+
+NOTE This is an inline note, also to be ignored.
+
+overlapping_cue
+00:00:04.000 --> 00:00:07.000
+This cue overlaps with the first one.
+(Appears from 00:04 to 00:07)
+
+00:00:08.000 --> 00:00:10.000
+This is a final cue.

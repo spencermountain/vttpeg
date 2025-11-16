@@ -1,0 +1,15 @@
+WEBVTT
+
+NOTE This is a single line comment
+
+NOTE
+This is a simple multi line comment
+
+NOTE
+One comment that is spanning
+more than one line.
+
+NOTE You can also make a comment
+across more than one line this way.
+
+NOTE TODO I might add a line to indicate work that still has to be done.

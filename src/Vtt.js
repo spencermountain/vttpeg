@@ -1,4 +1,4 @@
-import parse from './parse.js'
+import parse from './parse/index.js'
 import findGaps from './lib/gaps.js'
 import getStats from './lib/stats.js'
 import shift from './lib/shift.js'

@@ -65,6 +65,8 @@ There are some gotchas with the VTT format -
 
 This library helps you easily manipulate VTT files in Node.js and the browser.
 
+The parser is okay, but not perfect. It supports attributes and labels for cues, and ignores notes and styling blocks.
+
 ### Node Usage
 `npm install vttpeg`
 
