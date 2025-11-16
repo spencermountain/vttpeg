@@ -1,6 +1,6 @@
 <div align="center">
   <div><b>vttpeg</b></div>
-  <img src="https://user-images.githubusercontent.com/399657/68222691-6597f180-ffb9-11e9-8a32-a7f38aa8bded.png"/>
+  <!-- <img src="https://user-images.githubusercontent.com/399657/68222691-6597f180-ffb9-11e9-8a32-a7f38aa8bded.png"/> -->
   <div>manipulate subtitles in vtt format</div>
   <div><code>npm install vttpeg</code></div>
   <div align="center">
@@ -30,7 +30,6 @@
 <img height="50px" src="https://user-images.githubusercontent.com/399657/68221862-17ceb980-ffb8-11e9-87d4-7b30b6488f16.png"/>
 
 
-### About
 Subtitles come in a variety of formats, the only format supported in web browsers is **[VTT](https://en.wikipedia.org/wiki/WebVTT)**.
 
 
@@ -126,6 +125,7 @@ vttpeg --lint --rewrite './mySubtitle.vtt'  #(rewrites the file in place)
 
 ---
 
+### Info
 any subtitle format can be converted into VTT format with [ffmpeg](https://www.ffmpeg.org/):
 ```bash
 ffmpeg -i "mySubtitle.srt" "output.vtt"
