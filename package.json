@@ -11,6 +11,16 @@
     "vttpeg": "cli/bin.js"
   },
   "main": "src/_server.js",
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./builds/vttpeg.mjs"
+      },
+      "require": {
+        "default": "./builds/vttpeg.min.js"
+      }
+    }
+  },
   "module": "builds/vttpeg.mjs",
   "unpkg": "builds/vttpeg.mjs",
   "type": "module",
