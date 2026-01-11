@@ -1,26 +1,24 @@
-import vttpeg from './src/_server.js'
+import vttpeg from './src/server/index.js'
+// import fs from 'fs'
 
-const dir = '/Users/spencer/Desktop/subtitles/Simpsons Subtitles/S02'
-const file = '/Users/spencer/Desktop/subtitles/Simpsons Subtitles/S02/2x06 - Dead Putting Society.vtt'
+let input = `WEBVTT
 
-const vtt = vttpeg.fromFile(file)
-// console.log(vtt.firstEntry())
-// console.log(vtt.isValid())
-// console.log(vtt.lint())
-// console.log(vtt.json())
-console.log(vtt.stats())
-console.log(vtt.sceneSplit())
+00:22.908 --> 00:24.535
+Linda Johnson is
+a political liability.
 
-// const txt = `WEBVTT
+00:24.618 --> 00:25.786
+Harry, I need her.
 
-// 1
-// 00:00:01.500 --> 00:00:03.000
-// This is the first subtitle.
+00:25.828 --> 00:26.953
+I can understand now
 
-// 2
-// 00:00:04.000 --> 00:00:06.000
-// This is the second subtitle, with no cue identifier.`
-// const vtt = vttpeg(txt)
-// // vtt.shift(10)
-// vtt.shift(-10)
-// console.log(vtt.json())
+00:27.036 --> 00:28.287
+why Nelson
+finds you repugnant.`
+
+// const input = '/Volumes/4TB/subtitles/tv-shows/Columbo/S03/Columbo.S03E03.Candidate.For.Crime.vtt'
+// let txt = fs.readFileSync(input, 'utf8')
+let vtt = vttpeg(input)
+vtt.diff()
+// console.log(vtt.out())
