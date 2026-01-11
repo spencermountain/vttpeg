@@ -16,12 +16,12 @@ class Cues {
   }
 
   // readable plaintext
-  text() {
-    return toText(this.cues)
+  text(opts = {}) {
+    return toText(this.cues, opts)
   }
   // produce a new vtt file
   out(opts = {}) {
-    return toVtt(this.cues)
+    return toVtt(this.cues, opts)
   }
   debug() {
     debug(this.cues)

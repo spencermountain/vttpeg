@@ -20,6 +20,6 @@ finds you repugnant.`
 // const input = '/Volumes/4TB/subtitles/tv-shows/Columbo/S03/Columbo.S03E03.Candidate.For.Crime.vtt'
 // let txt = fs.readFileSync(input, 'utf8')
 let vtt = vttpeg(input)
-let html = vtt.diffHtml()
+let html = vtt.diffCli()
 console.log(html)
 // console.log(vtt.out())
