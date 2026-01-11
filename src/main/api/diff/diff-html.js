@@ -1,7 +1,7 @@
 const green = (str) => ' <span style="color:green">' + str + '</span> '
 const red = (str) => ' <span style="color:red">' + str + '</span> '
 const yellow = (str) => ' <span style="color:yellow">' + str + '</span> '
-const dim = (str) => ' <span style="color:gray">' + str + '</span> '
+const dim = (str) => ' <span style="color:gray">' + str + '\n</span> '
 
 const context_size = 40
 

@@ -1,6 +1,8 @@
 import parse from './parse/index.js'
 import { diff } from 'diff-match-patch-es'
 import Cues from './Cues.js'
+import diffHtml from './api/diff/diff-html.js'
+import diffCli from './api/diff/diff-cli.js'
 import splitScenes from './api/scenes/index.js'
 
 class Vtt {
@@ -36,6 +38,14 @@ class Vtt {
   _diff(opts = {}) {
     let output = this.out()
     return diff(this.input, output)
+  }
+  diffHtml(opts = {}) {
+    let diffs = this._diff(opts)
+    return diffHtml(diffs, this.input)
+  }
+  diffCli(opts = {}) {
+    let diffs = this._diff(opts)
+    return diffCli(diffs, this.input)
   }
 }
 

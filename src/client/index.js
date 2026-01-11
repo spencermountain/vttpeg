@@ -1,5 +1,5 @@
 import Vtt from '../main/Vtt.js'
-import printDiff from './diff-html.js'
+import printDiff from '../main/api/diff/diff-html.js'
 
 Vtt.prototype.diff = function () {
   let diffs = this._diff()
