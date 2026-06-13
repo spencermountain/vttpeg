@@ -16,7 +16,7 @@ function parseTimestamp(timestamp = '') {
   hours = parseInt(parts.pop() || '0', 10)
   milliseconds = parseInt(after || '0', 10)
 
-  return hours * 3600 + minutes * 60 + seconds + milliseconds / 1000
+  return (hours * 3600) + (minutes * 60) + seconds + (milliseconds / 1000)
 }
 
 // console.log(parseTimestamp('00:01:01.123'))

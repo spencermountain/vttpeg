@@ -60,11 +60,11 @@ class Vtt {
     return this
   }
   // compare former and current vtt content
-  diffHtml(opts = {}) {
+  diffHtml() {
     let output = this.out()
     return diffHtml(this.input, output)
   }
-  diffCli(opts = {}) {
+  diffCli() {
     let output = this.out()
     return diffCli(this.input, output)
   }

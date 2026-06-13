@@ -272,6 +272,7 @@ vttpeg --normalize --lint ./mySubtitle.vtt
 | `--append=<suffix>` | suffix for the written file (default `.new`) |
 | `--overwrite` | rewrite the file in place instead of appending a suffix |
 | `--normalize` | cleanup possible issues in the file |
+| `--interactive`, `-i` | review a diff and confirm each file before overwriting |
 
 When a transformation is applied (e.g. `--shift`), the result is written to a new file with the `--append` suffix unless `--overwrite` is given:
 ```bash
@@ -279,6 +280,22 @@ vttpeg --shift=-5 --append=_shift './mySubtitle.vtt'  # writes mySubtitle_shift.
 
 vttpeg --shift=10 --overwrite './mySubtitle.vtt'      # rewrites the file in place
 ```
+
+### Interactive mode
+Got a whole directory of subtitles you'd like to clean up, but don't want to do it blindly? `--interactive` walks through the matched files one at a time. For each file it applies your transforms, prints a coloured diff of what would change, and waits for a `y`/`n` before overwriting it in place. Files that wouldn't change are skipped automatically.
+```bash
+vttpeg --normalize --interactive './subtitles/*.vtt'
+```
+```
+./subtitles/ep01.vtt
+  WEBVTT
+  00:00:10.845 --> 00:00:17.845
+  -<i>Hello there</i>
+  +Hello there
+  write these changes? (y/N) y
+  ✓ saved
+```
+It works alongside the other transforms too — e.g. `vttpeg --shift=2 --normalize -i './subs/*.vtt'`. (Interactive always overwrites in place, so `--append`/`--overwrite` are ignored.)
 
 ---
 
