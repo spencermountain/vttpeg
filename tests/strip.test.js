@@ -84,9 +84,83 @@ Actual dialogue here.
   let vtt = vttpeg(text)
   assert.strictEqual(vtt.json().length, 3, '3 entries')
 
-  vtt.normalize({ stripMusic: true })
+  vtt.normalize({ stripSfx: true })
   assert.strictEqual(vtt.json().length, 1, '1 entry left')
   assert.strictEqual(vtt.text(), 'Actual dialogue here.', 'only dialogue remains')
+})
+
+test('stripMusic and stripSfx are independent', (t) => {
+  let text = `WEBVTT
+00:16.000 --> 00:18.000
+♪ Don't stop believin' ♪
+
+00:18.000 --> 00:20.000
+[door creaks]
+`
+  // keep lyrics, drop sound effects
+  let a = vttpeg(text)
+  a.normalize({ stripMusic: false, stripSfx: true })
+  assert.strictEqual(a.json().length, 1, 'sfx cue dropped')
+  assert.strictEqual(a.text(), `♪ Don't stop believin' ♪`, 'lyrics kept')
+
+  // keep sound effects, drop lyrics
+  let b = vttpeg(text)
+  b.normalize({ stripMusic: true, stripSfx: false })
+  assert.strictEqual(b.json().length, 1, 'music cue dropped')
+  assert.strictEqual(b.text(), `[door creaks]`, 'sfx kept')
+})
+
+test('stripInlineSfx removes mid-line sound cues', (t) => {
+  let text = `WEBVTT
+00:16.000 --> 00:18.000
+I'm fine. [SNIFFLES] Really.
+
+00:18.000 --> 00:20.000
+Hey [BANG] watch out!
+
+00:20.000 --> 00:22.000
+[SIGHING]
+`
+  let vtt = vttpeg(text)
+  // off by default, so whole-line stays for stripSfx; turn off stripSfx to isolate
+  vtt.normalize({ stripInlineSfx: true, stripSfx: false })
+  assert.deepStrictEqual(
+    vtt.json().map((c) => c.text[0]),
+    [`I'm fine. Really.`, 'Hey watch out!'],
+    'inline cues removed, whitespace tidied, empty cue dropped'
+  )
+})
+
+test('stripInlineSfx is off by default', (t) => {
+  let text = `WEBVTT
+00:16.000 --> 00:18.000
+I went home (finally) and slept.
+`
+  let vtt = vttpeg(text)
+  vtt.normalize()
+  assert.strictEqual(vtt.text(), 'I went home (finally) and slept.', 'asides preserved by default')
+})
+
+test('stripSpeakerLabels keeps the dialogue', (t) => {
+  let text = `WEBVTT
+00:16.000 --> 00:18.000
+[JOHN] I'm leaving.
+
+00:18.000 --> 00:20.000
+(NARRATOR): Once upon a time.
+
+00:20.000 --> 00:22.000
+[door creaks]
+`
+  let vtt = vttpeg(text)
+  // off by default: labels and whole-line sfx both present pre-normalize
+  vtt.normalize({ stripSpeakerLabels: true, stripSfx: false })
+  assert.strictEqual(vtt.json().length, 3, '3 entries kept')
+  assert.deepStrictEqual(
+    vtt.json().map((c) => c.text[0]),
+    [`I'm leaving.`, 'Once upon a time.', '[door creaks]'],
+    'labels stripped, whole-line cue untouched'
+  )
 })
 
 test('strip whitespace', (t) => {

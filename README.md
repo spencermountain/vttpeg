@@ -125,20 +125,46 @@ A `Cue` (from `.json()`) looks like:
 
 ```js
 vtt.normalize({
-  stripXml: true,        // <i>, <b>, ... tags
-  stripVoice: true,      // <v Bob>... voice tags
-  stripLang: true,       // <lang en>... language tags
-  stripStyle: true,      // cue settings (align/position/line)
-  stripMusic: true,      // ♪ ... ♪ and whole-line [SOUND] / (SOUND) cues
-  stripWhitespace: true, // trim each line, drop blank lines
-  stripNotes: true,      // cue identifiers / NOTE labels
-  stripMetadata: true,   // JSON metadata lines
-  stripUndisplayed: true,// cues with no displayable duration
-  fixOverlaps: true      // clamp overlapping cue times
+  stripXml: true,           // <i>, <b>, ... tags
+  stripVoice: true,         // <v Bob>... voice tags
+  stripLang: true,          // <lang en>... language tags
+  stripStyle: true,         // cue settings (align/position/line)
+  stripMusic: true,         // ♪ ... ♪ music-note lines
+  stripSfx: true,           // whole-line [SOUND] / (SOUND) effect cues
+  stripSpeakerLabels: false,// leading "[JOHN] " / "(NARRATOR): " labels (default off)
+  stripInlineSfx: false,    // [SOUND] / (SOUND) cues mid-line (default off)
+  stripWhitespace: true,    // trim each line, drop blank lines
+  stripNotes: true,         // cue identifiers / NOTE labels
+  stripMetadata: true,      // JSON metadata lines
+  stripUndisplayed: true,   // cues with no displayable duration
+  fixOverlaps: true         // clamp overlapping cue times
 })
 ```
 
-Here it strips a music intro and a couple of sound-effect cues, leaving just the dialogue:
+`stripSpeakerLabels` is off by default; turn it on to remove SDH speaker tags:
+```js
+let v = vttpeg(`WEBVTT
+
+00:00:01.000 --> 00:00:02.000
+[JOHN] I'm leaving.
+`)
+v.normalize({ stripSpeakerLabels: true })
+console.log(v.text())
+// I'm leaving.
+```
+
+`stripInlineSfx` (off by default) removes sfx markup `[..]` / `(..)` mid-line:
+```js
+let v = vttpeg(`WEBVTT
+
+00:00:01.000 --> 00:00:02.000
+I'm fine. [SNIFFLES] Really.
+`)
+v.normalize({ stripInlineSfx: true })
+console.log(v.text())
+// I'm fine. Really.
+```
+
 ```js
 let input = `WEBVTT
 
@@ -219,9 +245,9 @@ accepts a file, directory, or glob pattern
 ```bash
 npm install -g vttpeg
 
-vttpeg --shift=10 './subtitles/*.vtt'
+vttpeg --validate --shift=10 './subtitles/*.vtt'
 
-vttpeg --lint ./mySubtitle.vtt
+vttpeg --normalize --lint ./mySubtitle.vtt
 ```
 
 | flag | description |

@@ -34,20 +34,52 @@ const stripStyle = function (cues = []) {
   })
 }
 
+// drop music-note lines, eg  ♪ Don't stop believin' ♪
 const stripMusic = function (cues = []) {
   return cues.map((entry) => {
     entry.text = entry.text.filter((txt) => {
-      let line = txt.trim()
-      // music-note lines:  ♪ ... ♪
-      if (/^[-\s]*♪/.test(line)) {
-        return false
-      }
-      // whole-line sound descriptions:  [LAUGHING]  (CLEARING THROAT)
-      if (/^[-\s]*[[(].*[\])]\s*$/.test(line)) {
-        return false
-      }
-      return true
+      return !/^[-\s]*[♪♫♬]/.test(txt.trim())
     })
+    return entry
+  })
+}
+
+// drop whole-line sound-effect cues, eg  [LAUGHING]  (CLEARING THROAT)
+// (only whole-line, so inline speaker labels like "[JOHN] Hi" survive)
+const stripSfx = function (cues = []) {
+  return cues.map((entry) => {
+    entry.text = entry.text.filter((txt) => {
+      return !/^[-\s]*[[(].*[\])]\s*$/.test(txt.trim())
+    })
+    return entry
+  })
+}
+
+// strip a leading speaker label, keeping the dialogue, eg
+//   "[JOHN] I'm leaving." -> "I'm leaving."   "(NARRATOR): Once" -> "Once"
+// only fires when dialogue follows, so whole-line cues are left for stripSfx
+const stripSpeakerLabels = function (cues = []) {
+  return cues.map((entry) => {
+    entry.text = entry.text.map((txt) => {
+      return txt.replace(/^(\s*-?\s*)[[(][^\])]*[\])]\s*:?\s*(?=\S)/, '$1')
+    })
+    return entry
+  })
+}
+
+// strip [..] / (..) sound cues from anywhere within a line, eg
+//   "I'm fine. [SNIFFLES]" -> "I'm fine."   "Hey [BANG] watch out" -> "Hey watch out"
+// aggressive - also catches legitimate parenthetical asides, so it's opt-in
+const stripInlineSfx = function (cues = []) {
+  return cues.map((entry) => {
+    entry.text = entry.text
+      .map((txt) => {
+        return txt
+          .replace(/[[(][^\])]*[\])]/g, ' ')
+          .replace(/\s{2,}/g, ' ')
+          .trim()
+      })
+      .filter((txt) => txt.length > 0)
     return entry
   })
 }
@@ -80,4 +112,4 @@ const stripMetadata = function (cues = []) {
   })
 }
 
-export { stripXml, stripVoice, stripLang, stripStyle, stripMusic, stripWhitespace, stripNotes, stripMetadata }
+export { stripXml, stripVoice, stripLang, stripStyle, stripMusic, stripSfx, stripSpeakerLabels, stripInlineSfx, stripWhitespace, stripNotes, stripMetadata }

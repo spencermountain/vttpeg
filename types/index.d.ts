@@ -53,7 +53,11 @@ export interface LintOptions {
   allowOverlap?: boolean
 }
 
-/** Options for {@link Vtt.normalize} / {@link Cues.normalize}. All default to `true`. */
+/**
+ * Options for {@link Vtt.normalize} / {@link Cues.normalize}.
+ * All default to `true` except `stripSpeakerLabels` and `stripInlineSfx`,
+ * which default to `false`.
+ */
 export interface NormalizeOptions {
   /** remove XML/HTML tags such as `<i>` */
   stripXml?: boolean
@@ -61,17 +65,23 @@ export interface NormalizeOptions {
   stripVoice?: boolean
   /** remove language tags such as `<lang en>` */
   stripLang?: boolean
-  /** remove styling blocks */
+  /** remove cue settings (align/position/line/etc) */
   stripStyle?: boolean
-  /** remove music/sound cues such as `♪ ... ♪` */
+  /** remove music-note lines such as `♪ ... ♪` */
   stripMusic?: boolean
-  /** collapse and trim whitespace */
+  /** remove whole-line sound-effect cues such as `[SIGHING]` or `(CLEARING THROAT)` */
+  stripSfx?: boolean
+  /** strip a leading speaker label, keeping the dialogue (e.g. `[JOHN] Hi` → `Hi`). Default `false` */
+  stripSpeakerLabels?: boolean
+  /** strip `[..]`/`(..)` sound cues from anywhere in a line (e.g. `Fine. [SNIFFLES]` → `Fine.`). Aggressive — also removes parenthetical asides. Default `false` */
+  stripInlineSfx?: boolean
+  /** trim each line and drop blank lines (line-breaks are preserved) */
   stripWhitespace?: boolean
-  /** remove NOTE blocks */
+  /** remove cue identifiers / NOTE labels */
   stripNotes?: boolean
-  /** remove cue metadata/attributes */
+  /** remove JSON metadata lines */
   stripMetadata?: boolean
-  /** remove inline timestamp tags that aren't displayed */
+  /** drop cues with no displayable duration */
   stripUndisplayed?: boolean
   /** clamp overlapping cue times so they no longer collide */
   fixOverlaps?: boolean
