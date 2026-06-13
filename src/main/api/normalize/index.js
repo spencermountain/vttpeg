@@ -1,4 +1,5 @@
 import { stripXml, stripVoice, stripLang, stripStyle, stripMusic, stripWhitespace, stripNotes, stripMetadata } from './libs.js'
+import { fixOverlaps, stripUndisplayed } from './overlaps.js'
 
 const defaultOpts = {
   stripXml: true,
@@ -8,7 +9,9 @@ const defaultOpts = {
   stripMusic: true,
   stripWhitespace: true,
   stripNotes: true,
-  stripMetadata: true
+  stripMetadata: true,
+  stripUndisplayed: true,
+  fixOverlaps: true,
 }
 
 const normalize = (cues, opts = {}) => {
@@ -36,6 +39,12 @@ const normalize = (cues, opts = {}) => {
   }
   if (options.stripMetadata) {
     cues = stripMetadata(cues)
+  }
+  if (options.stripUndisplayed) {
+    cues = stripUndisplayed(cues)
+  }
+  if (options.fixOverlaps) {
+    cues = fixOverlaps(cues)
   }
   // remove empty entries
   cues = cues.filter((entry) => {

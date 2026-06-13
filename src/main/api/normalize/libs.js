@@ -67,4 +67,5 @@ const stripMetadata = function (cues = []) {
     return entry
   })
 }
+
 export { stripXml, stripVoice, stripLang, stripStyle, stripMusic, stripWhitespace, stripNotes, stripMetadata }
