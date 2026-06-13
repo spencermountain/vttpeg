@@ -15,6 +15,8 @@ const parseVTT = function (vttContent) {
   const cues = []
   let current = null
   let label = null
+  // does the file write timestamps in canonical (hh:mm:ss) or compact (mm:ss) form?
+  let hasHours = false
 
   for (let i = 1; i < lines.length; i++) {
     const line = lines[i].trim()
@@ -30,6 +32,10 @@ const parseVTT = function (vttContent) {
     // a cue line has a --> separator
     if (isCueLine.test(line)) {
       current = parseCue(line)
+      // remember the file's timestamp style from the start time
+      if (/^\d{1,2}:\d{2}:\d{2}/.test(line.split('-->')[0].trim())) {
+        hasHours = true
+      }
       if (label) {
         current.label = label
         label = null
@@ -50,6 +56,6 @@ const parseVTT = function (vttContent) {
     cues.push(current)
   }
 
-  return cues
+  return { cues, hasHours }
 }
 export default parseVTT

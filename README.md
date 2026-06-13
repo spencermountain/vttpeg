@@ -191,12 +191,12 @@ console.log(vtt.out())
 //
 // WEBVTT
 // 
-// 00:00:34.204 --> 00:00:39.278
+// 00:34.204 --> 00:39.278
 // -What the hell are you wearing?
 // -This is the mirror ball suit.
 // 
 ```
-Two-speaker line-breaks are kept intact, and the empty music/sound-effect cues are dropped. Pass `vtt.out({ showZeroHours: false })` if you'd rather omit the `00:` hours field.
+Two-speaker line-breaks are kept intact, and the empty music/sound-effect cues are dropped. Timestamps keep the style they came in with — this file used the compact `mm:ss.ttt` form, so the output does too (pass `vtt.out({ showZeroHours: true })` to force the full `hh:mm:ss.ttt` form).
 
 ### Plaintext Output
 ```js

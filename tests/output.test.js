@@ -13,6 +13,39 @@ Hello
   assert.ok(out.includes('00:00:17.845 --> 00:00:19.999'), out)
 })
 
+test('preserves compact (no-hours) timestamps on round-trip', (t) => {
+  let text = `WEBVTT
+
+00:10.845 --> 00:17.845
+Hello
+`
+  let out = vttpeg(text).out()
+  // no incidental "00:" hours field added
+  assert.ok(out.includes('00:10.845 --> 00:17.845'), out)
+  assert.ok(!out.includes('00:00:10.845'), 'did not add an hours field')
+})
+
+test('keeps compact style for a changed timestamp', (t) => {
+  let text = `WEBVTT
+
+00:10.000 --> 00:12.000
+Hello
+`
+  // shifting changes the values, but the no-hours style should be kept
+  let out = vttpeg(text).shift(5).out()
+  assert.ok(out.includes('00:15.000 --> 00:17.000'), out)
+})
+
+test('showZeroHours can still force a style', (t) => {
+  let text = `WEBVTT
+
+00:10.845 --> 00:17.845
+Hello
+`
+  let forced = vttpeg(text).out({ showZeroHours: true })
+  assert.ok(forced.includes('00:00:10.845 --> 00:00:17.845'), forced)
+})
+
 test('pads sub-100ms milliseconds correctly', (t) => {
   let text = `WEBVTT
 

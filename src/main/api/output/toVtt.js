@@ -20,7 +20,7 @@ const toTime = (int, opts) => {
   let minutes = Math.floor((totalMs % 3600000) / 60000)
   let seconds = Math.floor((totalMs % 60000) / 1000)
   let milliseconds = totalMs % 1000
-  // optionally omit leading zero hours
+  // hours are mandatory once non-zero, otherwise follow the file's style
   let out = ''
   if (hours !== 0 || opts.showZeroHours) {
     out += `${pad(hours)}:`

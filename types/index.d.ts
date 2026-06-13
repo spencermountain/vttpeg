@@ -89,7 +89,12 @@ export interface NormalizeOptions {
 
 /** Options for {@link Vtt.out} / {@link Cues.out}. */
 export interface OutOptions {
-  /** include a leading `00:` hours field even when hours is zero (default `true`) */
+  /**
+   * Force the hours style of every timestamp. When omitted, output follows the
+   * style detected when the file was parsed — compact `mm:ss.ttt` if the source
+   * had no hours field, otherwise canonical `hh:mm:ss.ttt`. Set `true` to always
+   * include the hours field, or `false` to omit it when hours are zero.
+   */
   showZeroHours?: boolean
 }
 
@@ -104,9 +109,11 @@ export interface ScenesOptions {
  * Mutating methods (`normalize`, `shift`) return the same instance for chaining.
  */
 export declare class Cues {
-  constructor(cues: Cue[])
+  constructor(cues: Cue[], showHours?: boolean)
   /** the underlying cue array */
   cues: Cue[]
+  /** the file's timestamp style — `true` for canonical `hh:mm:ss`, `false` for compact `mm:ss`. Used as the default for {@link Cues.out} */
+  showHours: boolean
   /** return a list of warnings about possible problems in the cues */
   lint(opts?: LintOptions): string[]
   /** return a new `Cues` containing only cues that look like spoken dialogue */

@@ -6,8 +6,8 @@ import splitScenes from './api/scenes/index.js'
 class Vtt {
   constructor(txt = '') {
     this.input = txt
-    let json = parse(txt)
-    this.cues = new Cues(json)
+    let { cues, hasHours } = parse(txt)
+    this.cues = new Cues(cues, hasHours)
   }
   // warnings about possible vtt problems
   lint(opts = {}) {
@@ -43,7 +43,7 @@ class Vtt {
   }
   // split into groups of cues
   scenes(opts = {}) {
-    return splitScenes(this.cues, opts).map((cues) => new Cues(cues))
+    return splitScenes(this.cues.cues, opts).map((cues) => new Cues(cues, this.cues.showHours))
   }
   shift(time) {
     this.cues = this.cues.shift(time)

@@ -7,8 +7,10 @@ import stats from './api/output/stats.js'
 import getDialogue from './api/dialogue/index.js'
 
 class Cues {
-  constructor(cues) {
+  constructor(cues, showHours = true) {
     this.cues = cues
+    // remember the file's timestamp style, so out() doesn't reformat them
+    this.showHours = showHours
   }
   // warnings about possible vtt problems
   lint(opts = {}) {
@@ -16,7 +18,7 @@ class Cues {
   }
   dialogue() {
     let dialogue = getDialogue(this.cues)
-    return new Cues(dialogue)
+    return new Cues(dialogue, this.showHours)
   }
   isValid() {
     let errors = lint(this.cues, { silent: true })
@@ -53,7 +55,8 @@ class Cues {
   }
   // produce a new vtt file
   out(opts = {}) {
-    return toVtt(this.cues, opts)
+    // default to the file's own timestamp style; an explicit opt still wins
+    return toVtt(this.cues, { showZeroHours: this.showHours, ...opts })
   }
   debug() {
     debug(this.cues)
