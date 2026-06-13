@@ -1,6 +1,6 @@
-import test from 'node:test';
-import assert from 'node:assert';
-import vttpeg from '../src/index.js';
+import test from 'node:test'
+import assert from 'node:assert'
+import vttpeg from '../src/index.js'
 
 test('basic', (t) => {
   let text = `WEBVTT

@@ -11,8 +11,7 @@ class Vtt {
   }
   // warnings about possible vtt problems
   lint(opts = {}) {
-    this.cues.lint(opts)
-    return this
+    return this.cues.lint(opts)
   }
   // changes to modify cues
   normalize(opts = {}) {
@@ -28,12 +27,20 @@ class Vtt {
   out(opts = {}) {
     return this.cues.out(opts)
   }
-
+  json() {
+    return this.cues.json()
+  }
+  isValid() {
+    return this.cues.isValid()
+  }
   // split into groups of cues
   scenes(opts = {}) {
     return splitScenes(this.cues, opts).map((cues) => new Cues(cues))
   }
-
+  shift(time) {
+    this.cues = this.cues.shift(time)
+    return this
+  }
   // compare former and current vtt content
   diffHtml(opts = {}) {
     let output = this.out()

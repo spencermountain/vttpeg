@@ -36,7 +36,7 @@ NOTE he says this in the intro
   assert.strictEqual(vtt.text(), firstOut, 'text is text')
 
 
-  vtt.stripVoice()
+  vtt.normalize({ stripVoice: true })
   assert.strictEqual(vtt.json().length, 5, '5 entries')
   assert.strictEqual(vtt.isValid(), true, 'is valid')
   assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
@@ -49,3 +49,49 @@ Thank you for walking down here.`
   assert.strictEqual(vtt.text(), secondOut, 'text is text')
 })
 
+test('strip music', (t) => {
+  let text = `WEBVTT
+00:16.000 --> 00:18.000
+-♪ The Mighty Boosh ♪
+-♪ Come with us to the Mighty Boosh ♪
+`
+  let vtt = vttpeg(text)
+  assert.strictEqual(vtt.json().length, 1, '1 entry')
+  assert.strictEqual(vtt.isValid(), true, 'is valid')
+  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+
+  let firstOut = `-♪ The Mighty Boosh ♪
+-♪ Come with us to the Mighty Boosh ♪`
+  assert.strictEqual(vtt.text(), firstOut, 'text is text')
+
+  vtt.normalize({ stripMusic: true })
+  assert.strictEqual(vtt.json().length, 1, '1 entry')
+  assert.strictEqual(vtt.isValid(), true, 'is valid')
+
+  let secondOut = ``
+  assert.strictEqual(vtt.text(), secondOut, 'text is text')
+})
+
+test('strip whitespace', (t) => {
+  let text = `WEBVTT
+00:22.908 --> 00:24.535
+Linda Johnson is
+a political liability.
+`
+  let vtt = vttpeg(text)
+  assert.strictEqual(vtt.json().length, 1, '1 entry')
+  assert.strictEqual(vtt.isValid(), true, 'is valid')
+  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+
+  let txt = `Linda Johnson is\na political liability.`
+  assert.strictEqual(vtt.text(), txt, 'text is text')
+
+  vtt.normalize({ stripWhitespace: true })
+  assert.strictEqual(vtt.json().length, 1, '1 entry')
+  assert.strictEqual(vtt.isValid(), true, 'is valid')
+  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+
+  let secondOut = `Linda Johnson is a political liability.`
+  assert.strictEqual(vtt.text(), secondOut, 'text is text')
+
+})

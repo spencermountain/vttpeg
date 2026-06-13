@@ -41,4 +41,14 @@ const stripMusic = function (cues = []) {
   })
 }
 
-export { stripXml, stripVoice, stripLang, stripStyle, stripMusic }
+const stripWhitespace = function (cues = []) {
+  return cues.map((entry) => {
+    entry.text = [entry.text.join(' ')]
+    entry.text = entry.text.map((txt) => {
+      return txt.replace(/^[ \t\n\r]+$/, '').trim()
+    })
+    return entry
+  })
+}
+
+export { stripXml, stripVoice, stripLang, stripStyle, stripMusic, stripWhitespace }

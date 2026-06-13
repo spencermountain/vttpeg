@@ -1,4 +1,4 @@
-import Vtt from '../main/Vtt.js'
+import Vtt from './main/Vtt.js'
 
 // factory
 const vttpeg = function (txt = '') {

@@ -1,11 +1,12 @@
-import { stripXml, stripVoice, stripLang, stripStyle, stripMusic } from './libs.js'
+import { stripXml, stripVoice, stripLang, stripStyle, stripMusic, stripWhitespace } from './libs.js'
 
 const defaultOpts = {
   stripXml: true,
   stripVoice: true,
   stripLang: true,
   stripStyle: true,
-  stripMusic: true
+  stripMusic: true,
+  stripWhitespace: true
 }
 
 const normalize = (cues, opts = {}) => {
@@ -24,6 +25,9 @@ const normalize = (cues, opts = {}) => {
   }
   if (options.stripVoice) {
     cues = stripVoice(cues)
+  }
+  if (options.stripWhitespace) {
+    cues = stripWhitespace(cues)
   }
   return cues
 }
