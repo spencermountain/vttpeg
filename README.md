@@ -90,6 +90,37 @@ let output = vtt.out()
 fs.writeFileSync('./newSubtitle.vtt', output)
 ```
 
+### Normalize
+Optionally remove XML tags, voice tags, language tags, style tags, and music tags.
+```js
+let input = `WEBVTT
+
+00:10.845 --> 00:17.845
+<i>-♪ The Mighty Boosh ♪
+-♪ Come with us to the Mighty Boosh ♪</i>
+
+00:23.965 --> 00:26.195
+[ELECTRONIC SQUELCHES, HUMMING]
+
+00:34.204 --> 00:39.278
+-What the hell are you wearing?
+-This is the mirror ball suit.
+
+00:39.564 --> 00:40.554
+[SIGHING]
+`
+let vtt = vttpeg(input)
+vtt.normalize()
+console.log(vtt.out())
+
+//
+// WEBVTT
+// 
+// 00:34.204 --> 00:39.278
+// -What the hell are you wearing?
+// -This is the mirror ball suit.
+// 
+```
 
 ### CLI usage
 accepts a file, directory, or glob pattern
@@ -108,6 +139,9 @@ vttpeg --shift=-5 --append=_shift './mySubtitle.vtt' # (mySubtitle_shift.vtt)
 vttpeg --lint --overwrite './mySubtitle.vtt'  #(rewrites the file in place)
 ```
 
+```bash
+vttpeg --normalize ./mySubtitle.vtt
+```
 
 ---
 

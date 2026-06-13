@@ -11,11 +11,13 @@ class Vtt {
   }
   // warnings about possible vtt problems
   lint(opts = {}) {
-    return this.cues.lint(opts)
+    this.cues.lint(opts)
+    return this
   }
   // changes to modify cues
   normalize(opts = {}) {
-    return this.cues.normalize(opts)
+    this.cues = this.cues.normalize(opts)
+    return this
   }
 
   // readable plaintext

@@ -1,25 +1,32 @@
 import vttpeg from './src/main/index.js'
 // import fs from 'fs'
 
+
 let input = `WEBVTT
+00:16.000 --> 00:18.000
+<v Roger Bingham>from the American Museum of Natural History
 
-00:10.845 --> 00:17.845
-<i>-♪ The Mighty Boosh ♪
--♪ Come with us to the Mighty Boosh ♪</i>
+intro:
+00:18.123 --> 00:20.000
+<v Roger Bingham>And with me is Neil deGrasse Tyson
 
-00:23.965 --> 00:26.195
-[ELECTRONIC SQUELCHES, HUMMING]
+00:20.000 --> 00:22.000
+<v Roger Bingham>Astrophysicist, Director of the Hayden Planetarium
 
-00:34.204 --> 00:39.278
--What the hell are you wearing?
--This is the mirror ball suit.
+00:22.000 --> 00:24.234
+<v Roger Bingham>at the AMNH.
 
-00:39.564 --> 00:40.554
-[SIGHING]
+NOTE he says this in the intro
+
+00:24.235 --> 00:26.000
+<v Roger Bingham>Thank you for walking down here.
 `
 
 // const input = '/Volumes/4TB/subtitles/tv-shows/Columbo/S03/Columbo.S03E03.Candidate.For.Crime.vtt'
 // let txt = fs.readFileSync(input, 'utf8')
 let vtt = vttpeg(input)
-vtt.diffCli()
-// console.log(vtt.out())
+vtt.normalize()
+// vtt.diffCli()
+console.log(vtt.out())
+// console.log(vtt.text())
+

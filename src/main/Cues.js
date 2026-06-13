@@ -8,11 +8,13 @@ class Cues {
   }
   // warnings about possible vtt problems
   lint(opts = {}) {
-    return lint(this.cues, opts)
+    lint(this.cues, opts)
+    return this
   }
   // changes to modify cues
   normalize(opts = {}) {
-    return normalize(this.cues, opts)
+    this.cues = normalize(this.cues, opts)
+    return this
   }
 
   // readable plaintext
@@ -25,6 +27,7 @@ class Cues {
   }
   debug() {
     debug(this.cues)
+    return this
   }
 }
 
