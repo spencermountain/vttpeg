@@ -69,7 +69,7 @@ if (cli.help) {
     --shift     shift the timestamps forward or backward
     --overwrite   overwrite the file
     --append    append to the file
-    --strip     cleanup xml tags from the file
+    --normalize     cleanup possible issues in the file
   `)
   process.exit(0)
 }
@@ -91,8 +91,8 @@ for (let i = 0; i < files.length; i += 1) {
   if (cli.shift) {
     vtt.shift(cli.shift)
   }
-  if (cli.strip) {
-    vtt.stripXml()
+  if (cli.normalize) {
+    vtt.normalize()
   }
   if (cli.validate) {
     if (!vtt.isValid()) {
@@ -104,7 +104,7 @@ for (let i = 0; i < files.length; i += 1) {
   }
 
   // should we write a new file?
-  if (cli.overwrite || cli.shift || cli.strip) {
+  if (cli.overwrite || cli.shift || cli.normalize) {
     let filename = path.basename(files[i])
     let newFilename = `${filename.split('.')[0]}${cli.append || ''}.vtt`
     if (cli.overwrite) {

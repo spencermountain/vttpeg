@@ -65,6 +65,8 @@ There are some gotchas with the VTT format -
 
 This library helps you easily manipulate VTT files in Node.js and the browser.
 
+It's small, dependency-light, ships with **TypeScript types**, and works as both an ESM/CommonJS module and a command-line tool.
+
 The parser is okay, but not perfect. It supports attributes and labels for cues, and ignores notes and styling blocks.
 
 ### JS API
@@ -74,24 +76,69 @@ The parser is okay, but not perfect. It supports attributes and labels for cues,
 import vttpeg from 'vttpeg'
 import fs from 'fs'
 
-const txt = fs.readFileSync('mySubtitle.vtt')
+const txt = fs.readFileSync('mySubtitle.vtt', 'utf8')
 const vtt = vttpeg(txt)
 
 // look for any issues in the subtitle
 vtt.lint()
-// fix em!
-vtt.normalize()
 
-// shift em all over by 5s
-vtt.shift(5)
+// clean it up, then nudge every cue 5s later
+vtt.normalize().shift(5)
 
-// write the output to a new vtt file
-let output = vtt.out()
-fs.writeFileSync('./newSubtitle.vtt', output)
+// write the result to a new vtt file
+fs.writeFileSync('./newSubtitle.vtt', vtt.out())
+```
+
+Most methods that change the cues (`normalize`, `shift`) mutate in place and return the document, so they chain.
+
+### API
+
+| method | returns | description |
+|---|---|---|
+| `vttpeg(text)` | `Vtt` | parse a `.vtt` string into a document |
+| `.lint(opts?)` | `string[]` | list possible problems (overlaps, empty/long cues, bad times) |
+| `.isValid()` | `boolean` | `true` when there are no lint errors |
+| `.normalize(opts?)` | `Vtt` | strip tags/cruft and fix overlaps *(chainable)* |
+| `.shift(seconds)` | `Vtt` | move every cue forwards (or backwards, if negative) *(chainable)* |
+| `.scenes(opts?)` | `Cues[]` | split into groups of cues separated by silent gaps |
+| `.dialogue()` | `Cues` | keep only cues that look like spoken dialogue |
+| `.stats()` | `Stats` | cue count, total/shortest/longest/average durations |
+| `.duration()` | `number` | total spoken duration, in seconds |
+| `.text()` | `string` | render as readable plaintext |
+| `.out(opts?)` | `string` | render back to a valid `.vtt` file |
+| `.json()` | `Cue[]` | the raw parsed cues |
+| `.diffHtml()` / `.diffCli()` | `string` | diff the original input against the current output |
+
+A `Cue` (from `.json()`) looks like:
+```js
+{
+  startTime: 645.68,        // seconds
+  endTime: 647.39,          // seconds
+  text: ["It's good..."],
+  label: '1',               // optional - cue identifier
+  attributes: 'line:90%'    // optional - trailing cue settings
+}
 ```
 
 ### Normalize
-Optionally remove XML tags, voice tags, language tags, style tags, and music tags.
+`normalize()` tidies up a subtitle file. By default it removes XML/HTML tags, voice tags, language tags, style blocks, music/sound cues, notes, and inline timestamps, collapses whitespace, and fixes overlapping cues. Every step is a flag you can turn off:
+
+```js
+vtt.normalize({
+  stripXml: true,        // <i>, <b>, ...
+  stripVoice: true,      // <v Bob>...
+  stripLang: true,       // <lang en>...
+  stripStyle: true,      // STYLE blocks
+  stripMusic: true,      // ♪ ... ♪ and [SOUND] cues
+  stripWhitespace: true,
+  stripNotes: true,      // NOTE blocks
+  stripMetadata: true,   // cue attributes
+  stripUndisplayed: true,
+  fixOverlaps: true
+})
+```
+
+Here it strips a music intro and a couple of sound-effect cues, leaving just the dialogue:
 ```js
 let input = `WEBVTT
 
@@ -145,6 +192,27 @@ console.log(vtt.text())
 // That's amore
 ```
 
+### Scenes & Stats
+`scenes()` groups cues into scenes by looking for silent gaps (default: 2 seconds), and `stats()` gives you a quick summary of a file:
+```js
+let vtt = vttpeg(txt)
+vtt.normalize()
+
+let scenes = vtt.scenes({ minGap: 3 }) // => Cues[]
+console.log(`${scenes.length} scenes`)
+
+console.log(vtt.stats())
+// {
+//   cue_count: 412,
+//   duration_seconds: 1284.5,
+//   duration: '00:21:24',
+//   shortest_cue_seconds: 0.4,
+//   longest_cue_seconds: 6.2,
+//   average_cue_seconds: 3.1,
+//   ...
+// }
+```
+
 ### CLI usage
 accepts a file, directory, or glob pattern
 ```bash
@@ -155,15 +223,20 @@ vttpeg --shift=10 './subtitles/*.vtt'
 vttpeg --lint ./mySubtitle.vtt
 ```
 
-by default, the files are written with a `'_new'` suffix - you can change this behaviour with the `-append` option or the `--overwrite` option.
-```bash
-vttpeg --shift=-5 --append=_shift './mySubtitle.vtt' # (mySubtitle_shift.vtt)
+| flag | description |
+|---|---|
+| `--lint` | print any lint warnings for each file |
+| `--validate` | report whether each file is valid |
+| `--shift=<seconds>` | shift every timestamp (negative shifts earlier) |
+| `--append=<suffix>` | suffix for the written file (default `.new`) |
+| `--overwrite` | rewrite the file in place instead of appending a suffix |
+| `--normalize` | cleanup possible issues in the file |
 
-vttpeg --lint --overwrite './mySubtitle.vtt'  #(rewrites the file in place)
-```
-
+When a transformation is applied (e.g. `--shift`), the result is written to a new file with the `--append` suffix unless `--overwrite` is given:
 ```bash
-vttpeg --normalize ./mySubtitle.vtt
+vttpeg --shift=-5 --append=_shift './mySubtitle.vtt'  # writes mySubtitle_shift.vtt
+
+vttpeg --shift=10 --overwrite './mySubtitle.vtt'      # rewrites the file in place
 ```
 
 ---

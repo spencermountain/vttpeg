@@ -112,7 +112,7 @@ export declare class Cues {
   /** shift every cue forward (or backward, if negative) by `time` seconds, in place */
   shift(time: number): this
   /** render the cues as readable plaintext */
-  text(opts?: Record<string, unknown>): string
+  text(): string
   /** render the cues as a valid VTT file */
   out(opts?: OutOptions): string
   /** log debugging stats to the console; returns this instance */
