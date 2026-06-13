@@ -10,7 +10,7 @@ const banner = `/* ${name} ${pkg.version} MIT */`
 
 export default [
   {
-    input: 'src/_client.js',
+    input: 'src/index.js',
     output: [
       {
         file: `builds/${name}.mjs`,
@@ -26,7 +26,7 @@ export default [
     ],
   },
   {
-    input: 'src/_client.js',
+    input: 'src/index.js',
     output: [
       {
         file: `builds/${name}.min.js`,

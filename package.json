@@ -1,6 +1,6 @@
 {
   "name": "vttpeg",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "utility for managing subtitles in vtt format",
   "scripts": {
     "build": "rollup -c --silent",
@@ -10,7 +10,7 @@
   "bin": {
     "vttpeg": "cli/bin.js"
   },
-  "main": "src/_server.js",
+  "main": "src/index.js",
   "exports": {
     ".": {
       "import": {
