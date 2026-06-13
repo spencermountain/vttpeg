@@ -40,11 +40,11 @@ const normalize = (cues, opts = {}) => {
   if (options.stripMetadata) {
     cues = stripMetadata(cues)
   }
-  if (options.stripUndisplayed) {
-    cues = stripUndisplayed(cues)
-  }
   if (options.fixOverlaps) {
     cues = fixOverlaps(cues)
+  }
+  if (options.stripUndisplayed) {
+    cues = stripUndisplayed(cues)
   }
   // remove empty entries
   cues = cues.filter((entry) => {

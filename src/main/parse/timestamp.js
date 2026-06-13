@@ -1,7 +1,7 @@
 // Check for timestamp line (00:00:00.000 --> 00:00:00.000) or 21:12.013
 
 // Parse a timestamp string (HH:MM:SS.mmm) into seconds
-function parseTimestamp(timestamp) {
+function parseTimestamp(timestamp = '') {
   let hours = 0
   let minutes = 0
   let seconds = 0

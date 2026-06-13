@@ -3,6 +3,8 @@ import normalize from './api/normalize/index.js'
 import { toText, toVtt, debug } from './api/output/index.js'
 import shift from './api/shift/index.js'
 import stats from './api/output/stats.js'
+import getDialogue from './api/dialogue/index.js'
+
 class Cues {
   constructor(cues) {
     this.cues = cues
@@ -10,6 +12,10 @@ class Cues {
   // warnings about possible vtt problems
   lint(opts = {}) {
     return lint(this.cues, opts)
+  }
+  dialogue() {
+    let dialogue = getDialogue(this.cues)
+    return new Cues(dialogue)
   }
   isValid() {
     let errors = lint(this.cues, { silent: true })

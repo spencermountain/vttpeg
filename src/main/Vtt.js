@@ -13,6 +13,9 @@ class Vtt {
   lint(opts = {}) {
     return this.cues.lint(opts)
   }
+  dialogue() {
+    return this.cues.dialogue()
+  }
   // changes to modify cues
   normalize(opts = {}) {
     this.cues = this.cues.normalize(opts)
