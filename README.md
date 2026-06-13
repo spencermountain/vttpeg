@@ -100,6 +100,8 @@ Most methods that change the cues (`normalize`, `shift`) mutate in place and ret
 | `.isValid()` | `boolean` | `true` when there are no lint errors |
 | `.normalize(opts?)` | `Vtt` | strip tags/cruft and fix overlaps *(chainable)* |
 | `.shift(seconds)` | `Vtt` | move every cue forwards (or backwards, if negative) *(chainable)* |
+| `.minDuration(seconds)` | `Vtt` | slow down cues that flash by too fast *(chainable)* |
+| `.maxDuration(seconds)` | `Vtt` | speed up cues that linger too long *(chainable)* |
 | `.scenes(opts?)` | `Cues[]` | split into groups of cues separated by silent gaps |
 | `.dialogue()` | `Cues` | keep only cues that look like spoken dialogue |
 | `.stats()` | `Stats` | cue count, total/shortest/longest/average durations |
@@ -239,6 +241,18 @@ console.log(vtt.stats())
 //   ...
 // }
 ```
+
+### Reading pace
+Adjust how long cues stay on screen, in seconds. `minDuration()` slows down cues that flash by too quickly (handy for slower readers), and `maxDuration()` reins in cues that hang around too long.
+
+```js
+let vtt = vttpeg(txt)
+
+vtt.minDuration(2)   // every cue stays up for at least 2s
+vtt.maxDuration(6)   // ...and no longer than 6s
+```
+
+`minDuration` only ever extends a cue's *end* time, and only into the gap before the next cue — it never overlaps the next subtitle. If a cue already butts up against the next one, there's no room to grow, so it's left unchanged (it'll just extend as far as it can, otherwise). `maxDuration` simply trims the end time, which always leaves a larger gap.
 
 ### CLI usage
 accepts a file, directory, or glob pattern

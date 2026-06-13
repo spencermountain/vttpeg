@@ -2,6 +2,7 @@ import lint from './api/lint/index.js'
 import normalize from './api/normalize/index.js'
 import { toText, toVtt, debug } from './api/output/index.js'
 import shift from './api/shift/index.js'
+import { minDuration, maxDuration } from './api/duration/index.js'
 import stats from './api/output/stats.js'
 import getDialogue from './api/dialogue/index.js'
 
@@ -34,6 +35,16 @@ class Cues {
   }
   shift(time) {
     this.cues = shift(this.cues, time)
+    return this
+  }
+  // slow down cues that flash by too quickly
+  minDuration(seconds) {
+    this.cues = minDuration(this.cues, seconds)
+    return this
+  }
+  // speed up cues that hang around too long
+  maxDuration(seconds) {
+    this.cues = maxDuration(this.cues, seconds)
     return this
   }
   // readable plaintext

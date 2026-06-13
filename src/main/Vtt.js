@@ -49,6 +49,16 @@ class Vtt {
     this.cues = this.cues.shift(time)
     return this
   }
+  // ensure cues stay on screen long enough to read
+  minDuration(seconds) {
+    this.cues = this.cues.minDuration(seconds)
+    return this
+  }
+  // ensure cues don't linger too long
+  maxDuration(seconds) {
+    this.cues = this.cues.maxDuration(seconds)
+    return this
+  }
   // compare former and current vtt content
   diffHtml(opts = {}) {
     let output = this.out()

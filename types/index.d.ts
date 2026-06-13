@@ -121,6 +121,10 @@ export declare class Cues {
   duration(): number
   /** shift every cue forward (or backward, if negative) by `time` seconds, in place */
   shift(time: number): this
+  /** extend cues shorter than `seconds` up to that duration, without overlapping the next cue */
+  minDuration(seconds: number): this
+  /** trim cues longer than `seconds` down to that duration */
+  maxDuration(seconds: number): this
   /** render the cues as readable plaintext */
   text(): string
   /** render the cues as a valid VTT file */
@@ -160,6 +164,10 @@ export declare class Vtt {
   scenes(opts?: ScenesOptions): Cues[]
   /** shift every cue forward (or backward, if negative) by `time` seconds, in place */
   shift(time: number): this
+  /** extend cues shorter than `seconds` up to that duration, without overlapping the next cue */
+  minDuration(seconds: number): this
+  /** trim cues longer than `seconds` down to that duration */
+  maxDuration(seconds: number): this
   /** an HTML diff between the original input and the current output */
   diffHtml(opts?: Record<string, unknown>): string
   /** a CLI/ANSI diff between the original input and the current output */
