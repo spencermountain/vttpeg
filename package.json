@@ -13,6 +13,7 @@
   "main": "src/index.js",
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "import": {
         "default": "./builds/vttpeg.mjs"
       },
@@ -21,6 +22,7 @@
       }
     }
   },
+  "types": "types/index.d.ts",
   "module": "builds/vttpeg.mjs",
   "unpkg": "builds/vttpeg.mjs",
   "type": "module",
@@ -30,7 +32,8 @@
   },
   "files": [
     "src",
-    "builds"
+    "builds",
+    "types"
   ],
   "engines": {
     "node": ">=20"

@@ -37,8 +37,8 @@ class Cues {
     return this
   }
   // readable plaintext
-  text(opts = {}) {
-    return toText(this.cues, opts)
+  text() {
+    return toText(this.cues)
   }
   // produce a new vtt file
   out(opts = {}) {
