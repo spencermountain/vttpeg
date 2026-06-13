@@ -122,6 +122,29 @@ console.log(vtt.out())
 // 
 ```
 
+### Plaintext Output
+```js
+let input = `WEBVTT
+1
+00:16.500 --> 00:18.500
+When the moon <00:17.500>hits your eye
+
+1
+00:00:18.500 --> 00:00:20.500
+Like a <00:19.000>big-a <00:19.500>pizza <00:20.000>pie
+
+1
+00:00:20.500 --> 00:00:21.500
+That's <00:00:21.000>amore
+`
+let vtt = vttpeg(input)
+vtt.normalize()
+console.log(vtt.text())
+// When the moon hits your eye
+// Like a big-a pizza pie
+// That's amore
+```
+
 ### CLI usage
 accepts a file, directory, or glob pattern
 ```bash

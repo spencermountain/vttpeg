@@ -18,7 +18,12 @@ class Vtt {
     this.cues = this.cues.normalize(opts)
     return this
   }
-
+  stats() {
+    return this.cues.stats()
+  }
+  duration() {
+    return this.cues.duration()
+  }
   // readable plaintext
   text() {
     return this.cues.text()

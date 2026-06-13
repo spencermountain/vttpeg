@@ -51,4 +51,20 @@ const stripWhitespace = function (cues = []) {
   })
 }
 
-export { stripXml, stripVoice, stripLang, stripStyle, stripMusic, stripWhitespace }
+const stripNotes = function (cues = []) {
+  return cues.map((entry) => {
+    delete entry.label
+    return entry
+  })
+}
+
+// remove JSON metadata blocks from text
+const stripMetadata = function (cues = []) {
+  return cues.map((entry) => {
+    entry.text = entry.text.filter((txt) => {
+      return !txt.match(/^[- ]*{/i)
+    })
+    return entry
+  })
+}
+export { stripXml, stripVoice, stripLang, stripStyle, stripMusic, stripWhitespace, stripNotes, stripMetadata }

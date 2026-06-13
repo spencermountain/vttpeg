@@ -1,4 +1,4 @@
-import { stripXml, stripVoice, stripLang, stripStyle, stripMusic, stripWhitespace } from './libs.js'
+import { stripXml, stripVoice, stripLang, stripStyle, stripMusic, stripWhitespace, stripNotes, stripMetadata } from './libs.js'
 
 const defaultOpts = {
   stripXml: true,
@@ -6,7 +6,9 @@ const defaultOpts = {
   stripLang: true,
   stripStyle: true,
   stripMusic: true,
-  stripWhitespace: true
+  stripWhitespace: true,
+  stripNotes: true,
+  stripMetadata: true
 }
 
 const normalize = (cues, opts = {}) => {
@@ -29,6 +31,16 @@ const normalize = (cues, opts = {}) => {
   if (options.stripWhitespace) {
     cues = stripWhitespace(cues)
   }
+  if (options.stripNotes) {
+    cues = stripNotes(cues)
+  }
+  if (options.stripMetadata) {
+    cues = stripMetadata(cues)
+  }
+  // remove empty entries
+  cues = cues.filter((entry) => {
+    return entry.text.length > 0
+  })
   return cues
 }
 

@@ -95,3 +95,33 @@ a political liability.
   assert.strictEqual(vtt.text(), secondOut, 'text is text')
 
 })
+
+test('strip notes', (t) => {
+  let text = `WEBVTT
+
+1
+00:00:22.230 --> 00:00:24.606
+This is the first subtitle.
+
+2 Some Text
+00:00:30.739 --> 00:00:34.074
+This is the second.
+
+3
+00:00:34.159 --> 00:00:35.743
+This is the third
+`
+  let vtt = vttpeg(text)
+  assert.strictEqual(vtt.json().length, 3, '3 entries')
+  assert.strictEqual(vtt.isValid(), true, 'is valid')
+  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  vtt.normalize({ stripNotes: true })
+  assert.strictEqual(vtt.json().length, 3, '3 entries')
+  assert.strictEqual(vtt.isValid(), true, 'is valid')
+  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+
+  let secondOut = `This is the first subtitle.
+This is the second.
+This is the third`
+  assert.strictEqual(vtt.text(), secondOut, 'text is text')
+})

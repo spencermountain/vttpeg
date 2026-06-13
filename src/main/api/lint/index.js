@@ -29,6 +29,11 @@ const lint = (cues, opts = {}) => {
     if (cue.text.length > opts.maxLength) {
       errors.push(`Text is too long for entry ${i}`)
     }
+    // check for overlapping cues
+    let nextCue = cues[i + 1]
+    if (nextCue && cue.endTime > nextCue.startTime) {
+      errors.push(`Overlapping cues for entry ${i}`)
+    }
   }
   if (errors.length > 0) {
     if (!opts.silent) {
