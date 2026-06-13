@@ -12,7 +12,7 @@ let options = {
   shift: 0,
   append: '.new',
   validate: false,
-  strip: false,
+  normalize: false,
 }
 
 let cli = yargs(hideBin(process.argv.slice(2)))
@@ -41,10 +41,10 @@ let cli = yargs(hideBin(process.argv.slice(2)))
     description: 'append to the file',
     default: options.append
   })
-  .option('strip', {
-    type: 'string',
-    description: 'cleanup xml tags from the file',
-    default: options.strip
+  .option('normalize', {
+    type: 'boolean',
+    description: 'cleanup possible issues in the file',
+    default: options.normalize
   }).version(pkg.version)
   .option('help', {
     type: 'boolean',

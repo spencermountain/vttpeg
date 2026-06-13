@@ -121,20 +121,20 @@ A `Cue` (from `.json()`) looks like:
 ```
 
 ### Normalize
-`normalize()` tidies up a subtitle file. By default it removes XML/HTML tags, voice tags, language tags, style blocks, music/sound cues, notes, and inline timestamps, collapses whitespace, and fixes overlapping cues. Every step is a flag you can turn off:
+`normalize()` tidies up a subtitle file. By default it removes XML/HTML tags, voice tags, language tags, cue settings, music/sound cues, notes, and inline timestamps, trims whitespace, and fixes overlapping cues. Every step is a flag you can turn off:
 
 ```js
 vtt.normalize({
-  stripXml: true,        // <i>, <b>, ...
-  stripVoice: true,      // <v Bob>...
-  stripLang: true,       // <lang en>...
-  stripStyle: true,      // STYLE blocks
-  stripMusic: true,      // ♪ ... ♪ and [SOUND] cues
-  stripWhitespace: true,
-  stripNotes: true,      // NOTE blocks
-  stripMetadata: true,   // cue attributes
-  stripUndisplayed: true,
-  fixOverlaps: true
+  stripXml: true,        // <i>, <b>, ... tags
+  stripVoice: true,      // <v Bob>... voice tags
+  stripLang: true,       // <lang en>... language tags
+  stripStyle: true,      // cue settings (align/position/line)
+  stripMusic: true,      // ♪ ... ♪ and whole-line [SOUND] / (SOUND) cues
+  stripWhitespace: true, // trim each line, drop blank lines
+  stripNotes: true,      // cue identifiers / NOTE labels
+  stripMetadata: true,   // JSON metadata lines
+  stripUndisplayed: true,// cues with no displayable duration
+  fixOverlaps: true      // clamp overlapping cue times
 })
 ```
 
@@ -163,11 +163,12 @@ console.log(vtt.out())
 //
 // WEBVTT
 // 
-// 00:34.204 --> 00:39.278
+// 00:00:34.204 --> 00:00:39.278
 // -What the hell are you wearing?
 // -This is the mirror ball suit.
 // 
 ```
+Two-speaker line-breaks are kept intact, and the empty music/sound-effect cues are dropped. Pass `vtt.out({ showZeroHours: false })` if you'd rather omit the `00:` hours field.
 
 ### Plaintext Output
 ```js

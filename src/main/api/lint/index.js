@@ -32,7 +32,9 @@ const lint = (cues, opts = {}) => {
       errors.push(`Text is empty for entry ${i}`)
       hasError = true
     }
-    if (cue.text.length > opts.maxLength) {
+    // flag any single line longer than maxLength characters
+    let longestLine = cue.text.reduce((max, line) => Math.max(max, line.length), 0)
+    if (longestLine > opts.maxLength) {
       errors.push(`Text is too long for entry ${i}`)
       hasError = true
     }

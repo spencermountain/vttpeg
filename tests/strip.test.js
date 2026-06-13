@@ -65,17 +65,35 @@ test('strip music', (t) => {
   assert.strictEqual(vtt.text(), firstOut, 'text is text')
 
   vtt.normalize({ stripMusic: true })
-  assert.strictEqual(vtt.json().length, 1, '1 entry')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
+  // the cue was entirely music, so it is dropped
+  assert.strictEqual(vtt.json().length, 0, '0 entries')
+  assert.strictEqual(vtt.text(), '', 'text is empty')
+})
 
-  let secondOut = ``
-  assert.strictEqual(vtt.text(), secondOut, 'text is text')
+test('strip bracketed sound cues', (t) => {
+  let text = `WEBVTT
+00:16.000 --> 00:18.000
+[ELECTRONIC SQUELCHES, HUMMING]
+
+00:18.000 --> 00:20.000
+(CLEARING THROAT)
+
+00:20.000 --> 00:22.000
+Actual dialogue here.
+`
+  let vtt = vttpeg(text)
+  assert.strictEqual(vtt.json().length, 3, '3 entries')
+
+  vtt.normalize({ stripMusic: true })
+  assert.strictEqual(vtt.json().length, 1, '1 entry left')
+  assert.strictEqual(vtt.text(), 'Actual dialogue here.', 'only dialogue remains')
 })
 
 test('strip whitespace', (t) => {
+  // extra internal spaces, a trailing space, and a blank line
   let text = `WEBVTT
 00:22.908 --> 00:24.535
-Linda Johnson is
+Linda  Johnson is
 a political liability.
 `
   let vtt = vttpeg(text)
@@ -83,17 +101,14 @@ a political liability.
   assert.strictEqual(vtt.isValid(), true, 'is valid')
   assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
-  let txt = `Linda Johnson is\na political liability.`
-  assert.strictEqual(vtt.text(), txt, 'text is text')
-
   vtt.normalize({ stripWhitespace: true })
   assert.strictEqual(vtt.json().length, 1, '1 entry')
   assert.strictEqual(vtt.isValid(), true, 'is valid')
   assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
-  let secondOut = `Linda Johnson is a political liability.`
-  assert.strictEqual(vtt.text(), secondOut, 'text is text')
-
+  // whitespace collapsed/trimmed, but the line-break is preserved
+  let secondOut = `Linda Johnson is\na political liability.`
+  assert.strictEqual(vtt.text(), secondOut, 'lines are trimmed but preserved')
 })
 
 test('strip notes', (t) => {

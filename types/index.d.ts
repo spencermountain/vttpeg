@@ -47,7 +47,7 @@ export interface LintOptions {
   silent?: boolean
   /** log details about each offending cue (default `false`) */
   verbose?: boolean
-  /** maximum allowed number of text lines per cue (default `100`) */
+  /** maximum allowed characters in a single text line (default `100`) */
   maxLength?: number
   /** don't flag a cue whose start time is at/after its end time (default `false`) */
   allowOverlap?: boolean
@@ -79,7 +79,7 @@ export interface NormalizeOptions {
 
 /** Options for {@link Vtt.out} / {@link Cues.out}. */
 export interface OutOptions {
-  /** include a leading `00:` hours field even when hours is zero (default `false`) */
+  /** include a leading `00:` hours field even when hours is zero (default `true`) */
   showZeroHours?: boolean
 }
 

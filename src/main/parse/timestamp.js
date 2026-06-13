@@ -7,7 +7,8 @@ function parseTimestamp(timestamp = '') {
   let seconds = 0
   let milliseconds = 0
 
-  let [before, after] = timestamp.split('.')
+  // tolerate SRT-style comma decimals (00:00:01,500)
+  let [before, after] = timestamp.replace(',', '.').split('.')
 
   let parts = before.split(':')
   seconds = parseInt(parts.pop() || '0', 10)
