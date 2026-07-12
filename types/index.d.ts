@@ -128,7 +128,7 @@ export declare class Cues {
   stats(): Stats
   /** total spoken duration, in seconds */
   duration(): number
-  /** shift every cue forward (or backward, if negative) by `time` seconds, in place */
+  /** shift every cue forward (or backward, if negative) by `time` seconds, in place - times clamp at zero */
   shift(time: number): this
   /** extend cues shorter than `seconds` up to that duration, without overlapping the next cue */
   minDuration(seconds: number): this
@@ -171,7 +171,7 @@ export declare class Vtt {
   isValid(): boolean
   /** split the cues into scenes, grouped by silent gaps */
   scenes(opts?: ScenesOptions): Cues[]
-  /** shift every cue forward (or backward, if negative) by `time` seconds, in place */
+  /** shift every cue forward (or backward, if negative) by `time` seconds, in place - times clamp at zero */
   shift(time: number): this
   /** extend cues shorter than `seconds` up to that duration, without overlapping the next cue */
   minDuration(seconds: number): this
