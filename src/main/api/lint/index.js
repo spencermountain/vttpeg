@@ -1,5 +1,5 @@
 const defaultOpts = {
-  silent: false,
+  silent: true,
   verbose: false,
   maxLength: 100,
   allowOverlap: false,
@@ -25,7 +25,7 @@ const lint = (cues, opts = {}) => {
       hasError = true
     }
     if (!opts.allowOverlap && cue.startTime >= cue.endTime) {
-      errors.push(`StartTime is greater than EndTime for entry ${i}`)
+      errors.push(`StartTime is not before EndTime for entry ${i}`)
       hasError = true
     }
     if (cue.text.length === 0) {

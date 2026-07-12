@@ -39,3 +39,21 @@ Hello, world 3!`
   assert.strictEqual(vtt.json()[2].startTime, 5, 'third entry starts at 5')
   assert.strictEqual(vtt.json()[2].endTime, 7, 'third entry ends at 7')
 })
+
+test('shift clamps at zero', (t) => {
+  let text = `WEBVTT
+
+00:00:05.000 --> 00:00:07.000
+early cue
+
+00:01:00.000 --> 00:01:02.000
+later cue
+`
+  let vtt = vttpeg(text)
+  vtt.shift(-10)
+  assert.strictEqual(vtt.json()[0].startTime, 0, 'clamped to 0')
+  assert.strictEqual(vtt.json()[0].endTime, 0, 'clamped to 0')
+  assert.strictEqual(vtt.json()[1].startTime, 50, 'later cue shifted normally')
+  // and the output has no negative timestamps
+  assert.ok(!vtt.out().includes('-1'), 'no garbage timestamps')
+})

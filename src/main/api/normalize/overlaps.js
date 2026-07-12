@@ -2,7 +2,8 @@ const fixOverlaps = (cues) => {
   for (let i = 0; i < cues.length - 1; i++) {
     const cue = cues[i]
     const nextCue = cues[i + 1]
-    if (cue.endTime > nextCue.startTime) {
+    // only clamp when the cue survives it - simultaneous cues are legal vtt
+    if (cue.endTime > nextCue.startTime && nextCue.startTime - 0.001 > cue.startTime) {
       cue.endTime = nextCue.startTime - 0.001
     }
   }

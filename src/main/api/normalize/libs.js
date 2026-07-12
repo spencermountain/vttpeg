@@ -8,10 +8,11 @@ const stripXml = function (cues = []) {
   })
 }
 
+// remove voice tags only, eg <v Bob>hi there</v>
 const stripVoice = function (cues = []) {
   return cues.map((entry) => {
     entry.text = entry.text.map((txt) => {
-      return txt.replace(/<[^>]*>/g, '')
+      return txt.replace(/<\/?v(?=[\s.>])[^>]*>/gi, '')
     })
     return entry
   })
@@ -102,12 +103,16 @@ const stripNotes = function (cues = []) {
   })
 }
 
-// remove JSON metadata blocks from text
+// remove JSON metadata payloads from text
 const stripMetadata = function (cues = []) {
   return cues.map((entry) => {
-    entry.text = entry.text.filter((txt) => {
-      return !txt.match(/^[- ]*{/i)
-    })
+    // a metadata payload opens with '{' - drop the whole cue text
+    if (/^[-\s]*{/.test(entry.text[0] || '')) {
+      entry.text = []
+    } else {
+      // also drop any standalone one-line json
+      entry.text = entry.text.filter((txt) => !/^[-\s]*{.*}\s*$/.test(txt))
+    }
     return entry
   })
 }
