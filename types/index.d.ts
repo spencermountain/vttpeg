@@ -43,7 +43,7 @@ export interface Stats {
 
 /** Options for {@link Vtt.lint} / {@link Cues.lint}. */
 export interface LintOptions {
-  /** suppress all console output (default `false`) */
+  /** suppress all console output (default `true`) */
   silent?: boolean
   /** log details about each offending cue (default `false`) */
   verbose?: boolean
@@ -83,6 +83,8 @@ export interface NormalizeOptions {
   stripMetadata?: boolean
   /** drop cues with no displayable duration */
   stripUndisplayed?: boolean
+  /** sort cues by start-time (stable - simultaneous cues keep their file-order) */
+  sortCues?: boolean
   /** clamp overlapping cue times so they no longer collide */
   fixOverlaps?: boolean
 }
@@ -126,7 +128,7 @@ export declare class Cues {
   stats(): Stats
   /** total spoken duration, in seconds */
   duration(): number
-  /** shift every cue forward (or backward, if negative) by `time` seconds, in place */
+  /** shift every cue forward (or backward, if negative) by `time` seconds, in place - times clamp at zero */
   shift(time: number): this
   /** extend cues shorter than `seconds` up to that duration, without overlapping the next cue */
   minDuration(seconds: number): this
@@ -169,16 +171,16 @@ export declare class Vtt {
   isValid(): boolean
   /** split the cues into scenes, grouped by silent gaps */
   scenes(opts?: ScenesOptions): Cues[]
-  /** shift every cue forward (or backward, if negative) by `time` seconds, in place */
+  /** shift every cue forward (or backward, if negative) by `time` seconds, in place - times clamp at zero */
   shift(time: number): this
   /** extend cues shorter than `seconds` up to that duration, without overlapping the next cue */
   minDuration(seconds: number): this
   /** trim cues longer than `seconds` down to that duration */
   maxDuration(seconds: number): this
   /** an HTML diff between the original input and the current output */
-  diffHtml(opts?: Record<string, unknown>): string
-  /** a CLI/ANSI diff between the original input and the current output */
-  diffCli(opts?: Record<string, unknown>): string
+  diffHtml(): string
+  /** print a coloured CLI diff between the original input and the current output */
+  diffCli(): void
 }
 
 /**

@@ -91,6 +91,11 @@ if (cli.help) {
 }
 
 let input = cli._[0]
+if (input === undefined || input === '') {
+  console.error(`Usage: vttpeg <file|directory|glob> [options]`)
+  console.error(`  try 'vttpeg --help' for more information`)
+  process.exit(1)
+}
 let files = getFiles(input)
 console.log(`\n\nProcessing ${files.length} vtt files...\n\n`)
 
@@ -102,6 +107,8 @@ for (let i = 0; i < files.length; i += 1) {
     if (lint.length > 0) {
       console.log(`Lint errors: ${files[i]}`)
       console.log(lint)
+    } else {
+      console.log(`No issues: ${files[i]}`)
     }
   }
   if (cli.shift) {
@@ -141,10 +148,11 @@ for (let i = 0; i < files.length; i += 1) {
 
   // should we write a new file?
   if (cli.overwrite || cli.shift || cli.normalize) {
-    let filename = path.basename(files[i])
-    let newFilename = `${filename.split('.')[0]}${cli.append || ''}.vtt`
+    let parsed = path.parse(files[i])
+    // only slice-off the final extension - 'My.Show.S01E01.vtt' keeps its dots
+    let newFilename = `${parsed.name}${cli.append || ''}${parsed.ext}`
     if (cli.overwrite) {
-      newFilename = filename
+      newFilename = parsed.base
     }
     // set it in the same directory as the original file
     newFilename = path.join(path.dirname(files[i]), newFilename)

@@ -99,7 +99,7 @@ Most methods that change the cues (`normalize`, `shift`) mutate in place and ret
 | `.lint(opts?)` | `string[]` | list possible problems (overlaps, empty/long cues, bad times) |
 | `.isValid()` | `boolean` | `true` when there are no lint errors |
 | `.normalize(opts?)` | `Vtt` | strip tags/cruft and fix overlaps *(chainable)* |
-| `.shift(seconds)` | `Vtt` | move every cue forwards (or backwards, if negative) *(chainable)* |
+| `.shift(seconds)` | `Vtt` | move every cue forwards or backwards - times clamp at `0:00` *(chainable)* |
 | `.minDuration(seconds)` | `Vtt` | slow down cues that flash by too fast *(chainable)* |
 | `.maxDuration(seconds)` | `Vtt` | speed up cues that linger too long *(chainable)* |
 | `.scenes(opts?)` | `Cues[]` | split into groups of cues separated by silent gaps |
@@ -109,7 +109,8 @@ Most methods that change the cues (`normalize`, `shift`) mutate in place and ret
 | `.text()` | `string` | render as readable plaintext |
 | `.out(opts?)` | `string` | render back to a valid `.vtt` file |
 | `.json()` | `Cue[]` | the raw parsed cues |
-| `.diffHtml()` / `.diffCli()` | `string` | diff the original input against the current output |
+| `.diffHtml()` | `string` | an html diff of the original input against the current output |
+| `.diffCli()` | - | print a coloured diff of the original input against the current output |
 
 A `Cue` (from `.json()`) looks like:
 ```js
@@ -123,7 +124,7 @@ A `Cue` (from `.json()`) looks like:
 ```
 
 ### Normalize
-`normalize()` tidies up a subtitle file. By default it removes XML/HTML tags, voice tags, language tags, cue settings, music/sound cues, notes, and inline timestamps, trims whitespace, and fixes overlapping cues. Every step is a flag you can turn off:
+`normalize()` tidies up a subtitle file. By default it removes XML/HTML tags, voice tags, language tags, cue settings, music/sound cues, notes, and inline timestamps, trims whitespace, sorts out-of-order cues, and fixes overlapping cues. Every step is a flag you can turn off:
 
 ```js
 vtt.normalize({
@@ -139,6 +140,7 @@ vtt.normalize({
   stripNotes: true,         // cue identifiers / NOTE labels
   stripMetadata: true,      // JSON metadata lines
   stripUndisplayed: true,   // cues with no displayable duration
+  sortCues: true,           // sort cues by start-time
   fixOverlaps: true         // clamp overlapping cue times
 })
 ```

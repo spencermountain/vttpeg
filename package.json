@@ -1,6 +1,6 @@
 {
   "name": "vttpeg",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "utility for managing subtitles in vtt format",
   "scripts": {
     "build": "rollup -c --silent",
@@ -46,15 +46,15 @@
     "printWidth": 100
   },
   "dependencies": {
-    "glob": "13.0.0",
+    "glob": "13.0.6",
     "same-diff": "^0.0.2",
     "yargs": "18.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "29.0.0",
+    "@rollup/plugin-commonjs": "29.0.3",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "16.0.3",
-    "@rollup/plugin-terser": "0.4.4"
+    "@rollup/plugin-terser": "1.0.0"
   },
   "license": "MIT"
 }

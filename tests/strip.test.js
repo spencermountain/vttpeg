@@ -163,6 +163,25 @@ test('stripSpeakerLabels keeps the dialogue', (t) => {
   )
 })
 
+test('stripMetadata removes the whole json payload', (t) => {
+  let text = `WEBVTT
+
+1
+00:00:00.100 --> 00:00:07.342
+{
+ "type": "WikipediaPage",
+ "url": "https://en.wikipedia.org/wiki/Samurai_Pizza_Cats"
+}
+
+00:00:08.000 --> 00:00:09.000
+Actual dialogue.
+`
+  let vtt = vttpeg(text)
+  vtt.normalize()
+  assert.strictEqual(vtt.json().length, 1, 'metadata cue dropped entirely')
+  assert.strictEqual(vtt.text(), 'Actual dialogue.', 'no json left behind')
+})
+
 test('strip whitespace', (t) => {
   // extra internal spaces, a trailing space, and a blank line
   let text = `WEBVTT

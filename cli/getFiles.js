@@ -8,6 +8,10 @@ const getFiles = (input) => {
   if (hasMagic(input)) {
     files = globSync(input)
   } else {
+    if (!fs.existsSync(input)) {
+      console.error(`No such file or directory: ${input}`)
+      process.exit(1)
+    }
     // if input is a directory, get all files in the directory
     if (fs.statSync(input).isDirectory()) {
       files = fs.readdirSync(input)
@@ -22,9 +26,9 @@ const getFiles = (input) => {
   files = files.filter(file => file.endsWith('.vtt'))
   // remove files that are not files
   files = files.filter(file => fs.statSync(file).isFile())
-  // remove dotfiles
-  files = files.filter(file => !file.startsWith('.'))
-  // remove files that are not readable 
+  // remove dotfiles - by filename, so './subs/a.vtt' still counts
+  files = files.filter(file => !path.basename(file).startsWith('.'))
+  // remove files that are not readable
   // files = files.filter(file => fs.accessSync(file, fs.constants.R_OK))
   if (files.length === 0) {
     console.error(`No files found for input: ${input}`)

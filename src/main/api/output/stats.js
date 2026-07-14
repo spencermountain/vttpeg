@@ -4,7 +4,7 @@ const pad = (num) => {
 const toTime = (time) => {
   let hours = Math.floor(time / 3600)
   let minutes = Math.floor((time % 3600) / 60)
-  let seconds = parseInt(time % 60, 10)
+  let seconds = Math.floor(time % 60)
   // let milliseconds = Math.floor((time % 1) * 1000)
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`//.${pad(milliseconds)}`
 }
@@ -14,6 +14,20 @@ const roundMilliseconds = (time) => {
 }
 
 const getStats = (cues) => {
+  // an empty file still has stats
+  if (cues.length === 0) {
+    return {
+      cue_count: 0,
+      duration_seconds: 0,
+      duration: toTime(0),
+      shortest_cue_seconds: 0,
+      shortestCue: toTime(0),
+      longest_cue_seconds: 0,
+      longestCue: toTime(0),
+      average_cue_seconds: 0,
+      averageCue: toTime(0),
+    }
+  }
   let duration = cues.reduce((acc, entry) => acc + entry.endTime - entry.startTime, 0)
   duration = roundMilliseconds(duration)
 

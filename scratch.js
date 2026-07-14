@@ -3,42 +3,38 @@ import fs from 'fs'
 import path from 'path'
 
 let txt = `WEBVTT
-05:43.680 --> 05:45.398
-It's good... (MUTTERING)
 
-05:45.480 --> 05:46.879
-Why did I add in that line?
+00:08.279 --> 00:10.903
+["AULD LANG SYNE" PLAYING]
 
-05:47.040 --> 05:48.075
-Ahem.
+00:24.570 --> 00:28.782
+NARRATOR: <i>On February 23, 1960,</i>
 
-05:48.240 --> 05:49.275
-(CLEARING THROAT)
+00:28.920 --> 00:31.854
+<i>a brass band played "Auld Lang Syne,"</i>
 
-05:49.360 --> 05:52.113
-Tory Bronwyn... Tory Matthews...
 
-`
+// `
 
-// open all files in the directory recursively
-const directory = '/Volumes/4TB/subtitles/'
-const files = fs.readdirSync(directory, { recursive: true })
-for (const file of files) {
-  if (file.endsWith('.vtt')) {
-    const filePath = path.join(directory, file)
-    const txt = fs.readFileSync(filePath, 'utf8')
-    let vtt = vttpeg(txt)
-    vtt.normalize()
-    // let scenes = vtt.scenes()
-    // console.log(vtt.duration())
-    if (!vtt.isValid()) {
-      console.log(file)
-      vtt.lint({ verbose: true })
-    }
-    // console.log(vtt.isValid())
-    // console.log(vtt.stats())
-  }
-}
+// // open all files in the directory recursively
+// const directory = '/Volumes/4TB/subtitles/'
+// const files = fs.readdirSync(directory, { recursive: true })
+// for (const file of files) {
+//   if (file.endsWith('.vtt')) {
+//     const filePath = path.join(directory, file)
+//     const txt = fs.readFileSync(filePath, 'utf8')
+//     let vtt = vttpeg(txt)
+//     vtt.normalize()
+//     // let scenes = vtt.scenes()
+//     // console.log(vtt.duration())
+//     if (!vtt.isValid()) {
+//       console.log(file)
+//       vtt.lint({ verbose: true })
+//     }
+//     // console.log(vtt.isValid())
+//     // console.log(vtt.stats())
+//   }
+// }
 
 // const inputFile = '/Volumes/4TB/subtitles/tv-shows/Simpsons/S01/1x12 - Krusty Gets Busted.vtt'
 // let txt = fs.readFileSync(inputFile, 'utf8')

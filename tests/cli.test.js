@@ -54,3 +54,36 @@ Clean already
   assert.match(out, /no changes/, 'reported no changes')
   assert.strictEqual(fs.readFileSync(file, 'utf8'), clean, 'file unchanged')
 })
+
+test('keeps dots in episode-style filenames', (t) => {
+  let dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vttpeg-'))
+  let file = path.join(dir, 'My.Show.S01E01.vtt')
+  fs.writeFileSync(file, dirty)
+  run(['--normalize', file], '')
+  let written = fs.readdirSync(dir).sort()
+  assert.deepStrictEqual(written, ['My.Show.S01E01.new.vtt', 'My.Show.S01E01.vtt'], 'suffix before .vtt only')
+})
+
+test('accepts a ./ path prefix', (t) => {
+  let dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vttpeg-'))
+  fs.writeFileSync(path.join(dir, 'sub.vtt'), dirty)
+  // run from inside the temp dir, README-style
+  let out = execFileSync('node', [bin, '--lint', './sub.vtt'], { cwd: dir, encoding: 'utf8' })
+  assert.match(out, /Processing 1 vtt files/, 'found the ./ file')
+})
+
+test('prints usage when no input is given', (t) => {
+  assert.throws(
+    () => run(['--lint'], ''),
+    (err) => /Usage: vttpeg/.test(err.stderr) && err.status === 1,
+    'usage message on stderr, exit 1'
+  )
+})
+
+test('reports a missing path cleanly', (t) => {
+  assert.throws(
+    () => run(['--lint', '/no/such/dir/file.vtt'], ''),
+    (err) => /No such file or directory/.test(err.stderr) && err.status === 1,
+    'friendly error, exit 1'
+  )
+})

@@ -14,6 +14,7 @@ const defaultOpts = {
   stripNotes: true,
   stripMetadata: true,
   stripUndisplayed: true,
+  sortCues: true,
   fixOverlaps: true,
 }
 
@@ -51,6 +52,11 @@ const normalize = (cues, opts = {}) => {
   }
   if (options.stripMetadata) {
     cues = stripMetadata(cues)
+  }
+  if (options.sortCues) {
+    // out-of-order cues are common, and break overlap-fixing
+    // (stable sort - simultaneous cues keep their file-order)
+    cues = [...cues].sort((a, b) => a.startTime - b.startTime)
   }
   if (options.fixOverlaps) {
     cues = fixOverlaps(cues)
