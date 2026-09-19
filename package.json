@@ -5,24 +5,26 @@
   "scripts": {
     "build": "rollup -c --silent",
     "test": "node --test --test-reporter=spec tests/*.test.js",
-    "watch": "node --watch scratch.js"
+    "watch": "node --watch scratch.js",
+    "check:types": "npm run build && attw --pack . && tsc -p tests/types/tsconfig.json"
   },
   "bin": {
     "vttpeg": "cli/bin.js"
   },
-  "main": "src/index.js",
+  "main": "builds/vttpeg.cjs",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
       "import": {
+        "types": "./types/index.d.ts",
         "default": "./builds/vttpeg.mjs"
       },
       "require": {
-        "default": "./builds/vttpeg.min.js"
+        "types": "./types/index.d.cts",
+        "default": "./builds/vttpeg.cjs"
       }
     }
   },
-  "types": "types/index.d.ts",
+  "types": "types/index.d.cts",
   "module": "builds/vttpeg.mjs",
   "unpkg": "builds/vttpeg.mjs",
   "type": "module",
@@ -51,10 +53,13 @@
     "yargs": "18.0.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@rollup/plugin-commonjs": "29.0.3",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "16.0.3",
-    "@rollup/plugin-terser": "1.0.0"
+    "@rollup/plugin-terser": "1.0.0",
+    "rollup": "^4.63.4",
+    "typescript": "^7.0.2"
   },
   "license": "MIT"
 }

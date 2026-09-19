@@ -29,6 +29,11 @@ export default [
     input: 'src/index.js',
     output: [
       {
+        file: `builds/${name}.cjs`,
+        format: 'cjs',
+        banner: banner,
+      },
+      {
         file: `builds/${name}.min.js`,
         format: 'umd',
         name,
