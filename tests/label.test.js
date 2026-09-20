@@ -1,5 +1,4 @@
-import test from 'node:test';
-import assert from 'node:assert';
+import test from 'tape';
 import vttpeg from '../src/index.js';
 
 test('label', (t) => {
@@ -21,11 +20,12 @@ This is the third
 This is the fourth
 `
   let vtt = vttpeg(text)
-  assert.strictEqual(vtt.json().length, 4, '4 entries')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
-  assert.strictEqual(vtt.json()[0].label, '1', 'first entry has label 1')
-  assert.strictEqual(vtt.json()[1].label, '2 Some Text', 'second entry has label 2')
-  assert.strictEqual(vtt.json()[2].label, '3', 'third entry has label 3')
-  assert.strictEqual(vtt.json()[3].label, undefined, 'fourth entry has no label')
+  t.equal(vtt.json().length, 4, '4 entries')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json()[0].label, '1', 'first entry has label 1')
+  t.equal(vtt.json()[1].label, '2 Some Text', 'second entry has label 2')
+  t.equal(vtt.json()[2].label, '3', 'third entry has label 3')
+  t.equal(vtt.json()[3].label, undefined, 'fourth entry has no label')
+  t.end()
 })

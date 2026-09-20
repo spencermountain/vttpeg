@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const defaultOpts = {
   silent: true,
   verbose: false,

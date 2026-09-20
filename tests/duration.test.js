@@ -1,6 +1,5 @@
 // test minDuration / maxDuration
-import test from 'node:test'
-import assert from 'node:assert'
+import test from 'tape'
 import vttpeg from '../src/index.js'
 
 const dur = (cue) => Math.round((cue.endTime - cue.startTime) * 1000) / 1000
@@ -13,8 +12,9 @@ Quick!
 `
   let vtt = vttpeg(text).minDuration(3)
   let cue = vtt.json()[0]
-  assert.strictEqual(cue.startTime, 1, 'start unchanged')
-  assert.strictEqual(dur(cue), 3, 'extended to 3s (no next cue to block it)')
+  t.equal(cue.startTime, 1, 'start unchanged')
+  t.equal(dur(cue), 3, 'extended to 3s (no next cue to block it)')
+  t.end()
 })
 
 test('minDuration grows only into the available gap', (t) => {
@@ -28,8 +28,9 @@ Second
 `
   // first cue wants 3s (-> 4.0) but the next starts at 3.5, so it caps there
   let vtt = vttpeg(text).minDuration(3)
-  assert.strictEqual(vtt.json()[0].endTime, 3.5, 'capped at next cue start')
-  assert.strictEqual(vtt.json()[1].endTime, 7, 'second cue already long enough, untouched')
+  t.equal(vtt.json()[0].endTime, 3.5, 'capped at next cue start')
+  t.equal(vtt.json()[1].endTime, 7, 'second cue already long enough, untouched')
+  t.end()
 })
 
 test('minDuration makes no change when there is no room', (t) => {
@@ -43,7 +44,8 @@ Second
 `
   // first cue touches the second - no gap to grow into
   let vtt = vttpeg(text).minDuration(3)
-  assert.strictEqual(vtt.json()[0].endTime, 2, 'left unchanged - no room')
+  t.equal(vtt.json()[0].endTime, 2, 'left unchanged - no room')
+  t.end()
 })
 
 test('minDuration leaves already-long cues alone', (t) => {
@@ -53,7 +55,8 @@ test('minDuration leaves already-long cues alone', (t) => {
 Plenty long
 `
   let vtt = vttpeg(text).minDuration(3)
-  assert.strictEqual(vtt.json()[0].endTime, 6, 'unchanged')
+  t.equal(vtt.json()[0].endTime, 6, 'unchanged')
+  t.end()
 })
 
 test('maxDuration trims a long cue', (t) => {
@@ -64,8 +67,9 @@ Lingering...
 `
   let vtt = vttpeg(text).maxDuration(4)
   let cue = vtt.json()[0]
-  assert.strictEqual(cue.startTime, 1, 'start unchanged')
-  assert.strictEqual(cue.endTime, 5, 'trimmed to 4s')
+  t.equal(cue.startTime, 1, 'start unchanged')
+  t.equal(cue.endTime, 5, 'trimmed to 4s')
+  t.end()
 })
 
 test('maxDuration leaves short cues alone', (t) => {
@@ -75,7 +79,8 @@ test('maxDuration leaves short cues alone', (t) => {
 Brief
 `
   let vtt = vttpeg(text).maxDuration(4)
-  assert.strictEqual(vtt.json()[0].endTime, 2, 'unchanged')
+  t.equal(vtt.json()[0].endTime, 2, 'unchanged')
+  t.end()
 })
 
 test('min/maxDuration are chainable', (t) => {
@@ -86,6 +91,7 @@ Hi
 `
   let out = vttpeg(text).minDuration(2).maxDuration(5).shift(1)
   let cue = out.json()[0]
-  assert.strictEqual(cue.startTime, 2, 'shifted')
-  assert.strictEqual(cue.endTime, 4, 'min applied then shifted')
+  t.equal(cue.startTime, 2, 'shifted')
+  t.equal(cue.endTime, 4, 'min applied then shifted')
+  t.end()
 })

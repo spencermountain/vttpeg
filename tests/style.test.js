@@ -1,5 +1,4 @@
-import test from 'node:test';
-import assert from 'node:assert';
+import test from 'tape';
 import vttpeg from '../src/index.js';
 
 test('style', (t) => {
@@ -21,10 +20,11 @@ This is <c.highlight>a highlighted class</c> and this is <lang en-us>English</la
 This is karaoke style: <00:00:22.500>Syllable 1, <00:00:23.500>Syllable 2.
 `
   let vtt = vttpeg(text)
-  assert.strictEqual(vtt.json().length, 5, '5 entries')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json().length, 5, '5 entries')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
+  t.end()
 })
 
 
@@ -51,7 +51,8 @@ be
 vertical.
 `
   let vtt = vttpeg(text)
-  assert.strictEqual(vtt.json().length, 5, '5 entries')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json().length, 5, '5 entries')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.end()
 })

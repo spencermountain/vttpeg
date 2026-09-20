@@ -1,6 +1,5 @@
 // test the .out() vtt serializer
-import test from 'node:test'
-import assert from 'node:assert'
+import test from 'tape'
 import vttpeg from '../src/index.js'
 
 test('round-trips timestamps without drift', (t) => {
@@ -10,7 +9,8 @@ test('round-trips timestamps without drift', (t) => {
 Hello
 `
   let out = vttpeg(text).out()
-  assert.ok(out.includes('00:00:17.845 --> 00:00:19.999'), out)
+  t.ok(out.includes('00:00:17.845 --> 00:00:19.999'), out)
+  t.end()
 })
 
 test('preserves compact (no-hours) timestamps on round-trip', (t) => {
@@ -21,8 +21,9 @@ Hello
 `
   let out = vttpeg(text).out()
   // no incidental "00:" hours field added
-  assert.ok(out.includes('00:10.845 --> 00:17.845'), out)
-  assert.ok(!out.includes('00:00:10.845'), 'did not add an hours field')
+  t.ok(out.includes('00:10.845 --> 00:17.845'), out)
+  t.ok(!out.includes('00:00:10.845'), 'did not add an hours field')
+  t.end()
 })
 
 test('keeps compact style for a changed timestamp', (t) => {
@@ -33,7 +34,8 @@ Hello
 `
   // shifting changes the values, but the no-hours style should be kept
   let out = vttpeg(text).shift(5).out()
-  assert.ok(out.includes('00:15.000 --> 00:17.000'), out)
+  t.ok(out.includes('00:15.000 --> 00:17.000'), out)
+  t.end()
 })
 
 test('showZeroHours can still force a style', (t) => {
@@ -43,7 +45,8 @@ test('showZeroHours can still force a style', (t) => {
 Hello
 `
   let forced = vttpeg(text).out({ showZeroHours: true })
-  assert.ok(forced.includes('00:00:10.845 --> 00:00:17.845'), forced)
+  t.ok(forced.includes('00:00:10.845 --> 00:00:17.845'), forced)
+  t.end()
 })
 
 test('pads sub-100ms milliseconds correctly', (t) => {
@@ -53,7 +56,8 @@ test('pads sub-100ms milliseconds correctly', (t) => {
 Hello
 `
   let out = vttpeg(text).out()
-  assert.ok(out.includes('00:00:01.050 --> 00:00:02.005'), out)
+  t.ok(out.includes('00:00:01.050 --> 00:00:02.005'), out)
+  t.end()
 })
 
 test('preserves cue settings on output', (t) => {
@@ -63,7 +67,8 @@ test('preserves cue settings on output', (t) => {
 Hello
 `
   let out = vttpeg(text).out()
-  assert.ok(out.includes('--> 00:00:04.000 align:start position:50%'), out)
+  t.ok(out.includes('--> 00:00:04.000 align:start position:50%'), out)
+  t.end()
 })
 
 test('does not escape apostrophes or quotes', (t) => {
@@ -73,7 +78,8 @@ test('does not escape apostrophes or quotes', (t) => {
 It's a "test", don't you think?
 `
   let out = vttpeg(text).out()
-  assert.ok(out.includes(`It's a "test", don't you think?`), out)
+  t.ok(out.includes(`It's a "test", don't you think?`), out)
+  t.end()
 })
 
 test('showZeroHours:false omits a zero hours field', (t) => {
@@ -83,7 +89,8 @@ test('showZeroHours:false omits a zero hours field', (t) => {
 Hello
 `
   let out = vttpeg(text).out({ showZeroHours: false })
-  assert.ok(out.includes('00:01.000 --> 00:02.000'), out)
+  t.ok(out.includes('00:01.000 --> 00:02.000'), out)
+  t.end()
 })
 
 test('parses SRT-style comma decimals', (t) => {
@@ -93,9 +100,10 @@ test('parses SRT-style comma decimals', (t) => {
 Hello
 `
   let cue = vttpeg(text).json()[0]
-  assert.strictEqual(cue.startTime, 1.5, 'start parsed')
-  assert.strictEqual(cue.endTime, 2.5, 'end parsed')
-  assert.strictEqual(cue.attributes, undefined, 'no leaked attributes')
+  t.equal(cue.startTime, 1.5, 'start parsed')
+  t.equal(cue.endTime, 2.5, 'end parsed')
+  t.equal(cue.attributes, undefined, 'no leaked attributes')
+  t.end()
 })
 
 test('lint flags an over-long line', (t) => {
@@ -105,5 +113,6 @@ test('lint flags an over-long line', (t) => {
 ${'x'.repeat(120)}
 `
   let errors = vttpeg(text).lint({ silent: true })
-  assert.ok(errors.some((e) => e.includes('too long')), JSON.stringify(errors))
+  t.ok(errors.some((e) => e.includes('too long')), JSON.stringify(errors))
+  t.end()
 })

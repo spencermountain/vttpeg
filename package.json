@@ -4,9 +4,10 @@
   "description": "utility for managing subtitles in vtt format",
   "scripts": {
     "build": "rollup -c --silent",
-    "test": "node --test --test-reporter=spec tests/*.test.js",
+    "test": "tape \"tests/*.test.js\" | tap-dancer",
     "watch": "node --watch scratch.js",
-    "check:types": "npm run build && attw --pack . && tsc -p tests/types/tsconfig.json"
+    "check:types": "npm run build && attw --pack . && tsc -p tests/types/tsconfig.json",
+    "lint": "eslint ."
   },
   "bin": {
     "vttpeg": "cli/bin.js"
@@ -53,13 +54,16 @@
     "yargs": "18.0.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.5",
     "@rollup/plugin-commonjs": "29.0.3",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@rollup/plugin-terser": "1.0.0",
     "rollup": "^4.63.4",
-    "typescript": "^7.0.2"
+    "tape": "^5.10.2",
+    "typescript": "^7.0.2",
+    "tap-dancer": "0.3.4",
+    "eslint": "10.11.0",
+    "eslint-plugin-regexp": "3.3.1"
   },
   "license": "MIT"
 }

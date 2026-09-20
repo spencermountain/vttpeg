@@ -1,5 +1,4 @@
-import test from 'node:test';
-import assert from 'node:assert';
+import test from 'tape';
 import vttpeg from '../src/index.js';
 
 test('strip voices', (t) => {
@@ -24,29 +23,30 @@ NOTE he says this in the intro
 
 `
   let vtt = vttpeg(text)
-  assert.strictEqual(vtt.json().length, 5, '5 entries')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json().length, 5, '5 entries')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
   let firstOut = `<v Roger Bingham>from the American Museum of Natural History
 <v Roger Bingham>And with me is Neil deGrasse Tyson
 <v Roger Bingham>Astrophysicist, Director of the Hayden Planetarium
 <v Roger Bingham>at the AMNH.
 <v Roger Bingham>Thank you for walking down here.`
-  assert.strictEqual(vtt.text(), firstOut, 'text is text')
+  t.equal(vtt.text(), firstOut, 'text is text')
 
 
   vtt.normalize({ stripVoice: true })
-  assert.strictEqual(vtt.json().length, 5, '5 entries')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json().length, 5, '5 entries')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
   let secondOut = `from the American Museum of Natural History
 And with me is Neil deGrasse Tyson
 Astrophysicist, Director of the Hayden Planetarium
 at the AMNH.
 Thank you for walking down here.`
-  assert.strictEqual(vtt.text(), secondOut, 'text is text')
+  t.equal(vtt.text(), secondOut, 'text is text')
+  t.end()
 })
 
 test('strip music', (t) => {
@@ -56,18 +56,19 @@ test('strip music', (t) => {
 -♪ Come with us to the Mighty Boosh ♪
 `
   let vtt = vttpeg(text)
-  assert.strictEqual(vtt.json().length, 1, '1 entry')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json().length, 1, '1 entry')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
   let firstOut = `-♪ The Mighty Boosh ♪
 -♪ Come with us to the Mighty Boosh ♪`
-  assert.strictEqual(vtt.text(), firstOut, 'text is text')
+  t.equal(vtt.text(), firstOut, 'text is text')
 
   vtt.normalize({ stripMusic: true })
   // the cue was entirely music, so it is dropped
-  assert.strictEqual(vtt.json().length, 0, '0 entries')
-  assert.strictEqual(vtt.text(), '', 'text is empty')
+  t.equal(vtt.json().length, 0, '0 entries')
+  t.equal(vtt.text(), '', 'text is empty')
+  t.end()
 })
 
 test('strip bracketed sound cues', (t) => {
@@ -82,11 +83,12 @@ test('strip bracketed sound cues', (t) => {
 Actual dialogue here.
 `
   let vtt = vttpeg(text)
-  assert.strictEqual(vtt.json().length, 3, '3 entries')
+  t.equal(vtt.json().length, 3, '3 entries')
 
   vtt.normalize({ stripSfx: true })
-  assert.strictEqual(vtt.json().length, 1, '1 entry left')
-  assert.strictEqual(vtt.text(), 'Actual dialogue here.', 'only dialogue remains')
+  t.equal(vtt.json().length, 1, '1 entry left')
+  t.equal(vtt.text(), 'Actual dialogue here.', 'only dialogue remains')
+  t.end()
 })
 
 test('stripMusic and stripSfx are independent', (t) => {
@@ -100,14 +102,15 @@ test('stripMusic and stripSfx are independent', (t) => {
   // keep lyrics, drop sound effects
   let a = vttpeg(text)
   a.normalize({ stripMusic: false, stripSfx: true })
-  assert.strictEqual(a.json().length, 1, 'sfx cue dropped')
-  assert.strictEqual(a.text(), `♪ Don't stop believin' ♪`, 'lyrics kept')
+  t.equal(a.json().length, 1, 'sfx cue dropped')
+  t.equal(a.text(), `♪ Don't stop believin' ♪`, 'lyrics kept')
 
   // keep sound effects, drop lyrics
   let b = vttpeg(text)
   b.normalize({ stripMusic: true, stripSfx: false })
-  assert.strictEqual(b.json().length, 1, 'music cue dropped')
-  assert.strictEqual(b.text(), `[door creaks]`, 'sfx kept')
+  t.equal(b.json().length, 1, 'music cue dropped')
+  t.equal(b.text(), `[door creaks]`, 'sfx kept')
+  t.end()
 })
 
 test('stripInlineSfx removes mid-line sound cues', (t) => {
@@ -124,11 +127,12 @@ Hey [BANG] watch out!
   let vtt = vttpeg(text)
   // off by default, so whole-line stays for stripSfx; turn off stripSfx to isolate
   vtt.normalize({ stripInlineSfx: true, stripSfx: false })
-  assert.deepStrictEqual(
+  t.deepEqual(
     vtt.json().map((c) => c.text[0]),
     [`I'm fine. Really.`, 'Hey watch out!'],
     'inline cues removed, whitespace tidied, empty cue dropped'
   )
+  t.end()
 })
 
 test('stripInlineSfx is off by default', (t) => {
@@ -138,7 +142,8 @@ I went home (finally) and slept.
 `
   let vtt = vttpeg(text)
   vtt.normalize()
-  assert.strictEqual(vtt.text(), 'I went home (finally) and slept.', 'asides preserved by default')
+  t.equal(vtt.text(), 'I went home (finally) and slept.', 'asides preserved by default')
+  t.end()
 })
 
 test('stripSpeakerLabels keeps the dialogue', (t) => {
@@ -155,12 +160,13 @@ test('stripSpeakerLabels keeps the dialogue', (t) => {
   let vtt = vttpeg(text)
   // off by default: labels and whole-line sfx both present pre-normalize
   vtt.normalize({ stripSpeakerLabels: true, stripSfx: false })
-  assert.strictEqual(vtt.json().length, 3, '3 entries kept')
-  assert.deepStrictEqual(
+  t.equal(vtt.json().length, 3, '3 entries kept')
+  t.deepEqual(
     vtt.json().map((c) => c.text[0]),
     [`I'm leaving.`, 'Once upon a time.', '[door creaks]'],
     'labels stripped, whole-line cue untouched'
   )
+  t.end()
 })
 
 test('stripMetadata removes the whole json payload', (t) => {
@@ -178,8 +184,9 @@ Actual dialogue.
 `
   let vtt = vttpeg(text)
   vtt.normalize()
-  assert.strictEqual(vtt.json().length, 1, 'metadata cue dropped entirely')
-  assert.strictEqual(vtt.text(), 'Actual dialogue.', 'no json left behind')
+  t.equal(vtt.json().length, 1, 'metadata cue dropped entirely')
+  t.equal(vtt.text(), 'Actual dialogue.', 'no json left behind')
+  t.end()
 })
 
 test('strip whitespace', (t) => {
@@ -190,18 +197,19 @@ Linda  Johnson is
 a political liability.
 `
   let vtt = vttpeg(text)
-  assert.strictEqual(vtt.json().length, 1, '1 entry')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json().length, 1, '1 entry')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
   vtt.normalize({ stripWhitespace: true })
-  assert.strictEqual(vtt.json().length, 1, '1 entry')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json().length, 1, '1 entry')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
   // whitespace collapsed/trimmed, but the line-break is preserved
   let secondOut = `Linda Johnson is\na political liability.`
-  assert.strictEqual(vtt.text(), secondOut, 'lines are trimmed but preserved')
+  t.equal(vtt.text(), secondOut, 'lines are trimmed but preserved')
+  t.end()
 })
 
 test('strip notes', (t) => {
@@ -220,16 +228,17 @@ This is the second.
 This is the third
 `
   let vtt = vttpeg(text)
-  assert.strictEqual(vtt.json().length, 3, '3 entries')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json().length, 3, '3 entries')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
   vtt.normalize({ stripNotes: true })
-  assert.strictEqual(vtt.json().length, 3, '3 entries')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json().length, 3, '3 entries')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
   let secondOut = `This is the first subtitle.
 This is the second.
 This is the third`
-  assert.strictEqual(vtt.text(), secondOut, 'text is text')
+  t.equal(vtt.text(), secondOut, 'text is text')
+  t.end()
 })

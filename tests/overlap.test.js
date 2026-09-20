@@ -1,6 +1,5 @@
 // test the fixOverlaps function
-import test from 'node:test'
-import assert from 'node:assert'
+import test from 'tape'
 import vttpeg from '../src/index.js'
 
 test('fixOverlaps', (t) => {
@@ -18,12 +17,13 @@ This cue overlaps with the first one.
 This is a final cue.
   `
   let vtt = vttpeg(text)
-  assert.strictEqual(vtt.json().length, 3, '3 entries')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 1, '1 lint error')
+  t.equal(vtt.json().length, 3, '3 entries')
+  t.equal(vtt.lint({ silent: true }).length, 1, '1 lint error')
 
   vtt.normalize({ fixOverlaps: true })
-  assert.strictEqual(vtt.json().length, 3, '3 entries')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, '0 lint errors')
+  t.equal(vtt.json().length, 3, '3 entries')
+  t.equal(vtt.lint({ silent: true }).length, 0, '0 lint errors')
+  t.end()
 })
 
 test('normalize sorts out-of-order cues instead of dropping them', (t) => {
@@ -40,13 +40,14 @@ this cue is third
 `
   let vtt = vttpeg(text)
   vtt.normalize()
-  assert.strictEqual(vtt.json().length, 3, 'all 3 cues kept')
-  assert.deepStrictEqual(
+  t.equal(vtt.json().length, 3, 'all 3 cues kept')
+  t.deepEqual(
     vtt.json().map((c) => c.startTime),
     [1, 10, 20],
     'sorted by start time'
   )
-  assert.strictEqual(vtt.isValid(), true, 'valid after normalize')
+  t.equal(vtt.isValid(), true, 'valid after normalize')
+  t.end()
 })
 
 test('simultaneous cues survive normalize', (t) => {
@@ -60,10 +61,11 @@ bottom line
 `
   let vtt = vttpeg(text)
   vtt.normalize()
-  assert.strictEqual(vtt.json().length, 2, 'both cues kept')
-  assert.deepStrictEqual(
+  t.equal(vtt.json().length, 2, 'both cues kept')
+  t.deepEqual(
     vtt.json().map((c) => c.text[0]),
     ['top line', 'bottom line'],
     'file-order preserved'
   )
+  t.end()
 })

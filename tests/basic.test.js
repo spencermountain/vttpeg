@@ -1,5 +1,4 @@
-import test from 'node:test'
-import assert from 'node:assert'
+import test from 'tape'
 import vttpeg from '../src/index.js'
 
 test('basic', (t) => {
@@ -14,7 +13,8 @@ This is the first subtitle.
 This is the second subtitle, with no cue identifier.
 `
   let vtt = vttpeg(text)
-  assert.strictEqual(vtt.json().length, 2, '2 entries')
-  assert.strictEqual(vtt.isValid(), true, 'is valid')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.equal(vtt.json().length, 2, '2 entries')
+  t.equal(vtt.isValid(), true, 'is valid')
+  t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
+  t.end()
 })

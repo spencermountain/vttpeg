@@ -1,10 +1,6 @@
 // test linting of vtt files
-import test from 'node:test'
-import assert from 'node:assert'
+import test from 'tape'
 import vttpeg from '../src/index.js'
-import fs from 'fs'
-import path from 'path'
-
 
 test('lint overlapping cues', (t) => {
   let input = `WEBVTT
@@ -23,7 +19,8 @@ This cue overlaps with the first one.
 This is a final cue.
   `
   let vtt = vttpeg(input)
-  assert.strictEqual(vtt.json().length, 3, '3 entries')
-  assert.strictEqual(vtt.lint({ silent: true }).length, 1, '1 lint error')
-  assert.strictEqual(vtt.isValid(), false, 'is not valid')
+  t.equal(vtt.json().length, 3, '3 entries')
+  t.equal(vtt.lint({ silent: true }).length, 1, '1 lint error')
+  t.equal(vtt.isValid(), false, 'is not valid')
+  t.end()
 })
