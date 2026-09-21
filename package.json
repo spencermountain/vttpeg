@@ -9,6 +9,8 @@
     "check:types": "npm run build && attw --pack . && tsc -p tests/types/tsconfig.json",
     "lint": "eslint ."
   },
+  "homepage": "https://work.spencermountain.dev/vttpeg",
+  "author": "Spencer Kelly <spencermountain@gmail.com> (https://spencermountain.dev)",
   "bin": {
     "vttpeg": "cli/bin.js"
   },
@@ -29,10 +31,7 @@
   "module": "builds/vttpeg.mjs",
   "unpkg": "builds/vttpeg.mjs",
   "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/spencermountain/vttpeg.git"
-  },
+  "repository": "github:spencermountain/vttpeg",
   "files": [
     "src",
     "builds",
