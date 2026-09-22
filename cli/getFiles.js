@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 import { globSync, hasMagic } from 'glob'
 import fs from 'fs'
 import path from 'path'

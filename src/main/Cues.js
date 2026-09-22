@@ -17,11 +17,11 @@ class Cues {
     return lint(this.cues, opts)
   }
   dialogue() {
-    let dialogue = getDialogue(this.cues)
+    const dialogue = getDialogue(this.cues)
     return new Cues(dialogue, this.showHours)
   }
   isValid() {
-    let errors = lint(this.cues, { silent: true })
+    const errors = lint(this.cues, { silent: true })
     return errors.length === 0
   }
   // changes to modify cues

@@ -3,7 +3,7 @@ import vttpeg from '../src/index.js';
 
 test('shift', (t) => {
   t.equal(true, true, 'true is true')
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:00.000 --> 00:00:02.000
 Hello, world!
@@ -13,7 +13,7 @@ Hello, world 2!
 
 00:00:05.000 --> 00:00:07.000
 Hello, world 3!`
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
 
   t.equal(vtt.json()[0].startTime, 0, 'first entry starts at 0')
   t.equal(vtt.json()[0].endTime, 2, 'first entry ends at 2')
@@ -41,7 +41,7 @@ Hello, world 3!`
 })
 
 test('shift clamps at zero', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:05.000 --> 00:00:07.000
 early cue
@@ -49,7 +49,7 @@ early cue
 00:01:00.000 --> 00:01:02.000
 later cue
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   vtt.shift(-10)
   t.equal(vtt.json()[0].startTime, 0, 'clamped to 0')
   t.equal(vtt.json()[0].endTime, 0, 'clamped to 0')

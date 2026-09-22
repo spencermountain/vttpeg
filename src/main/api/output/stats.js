@@ -2,9 +2,9 @@ const pad = (num) => {
   return num.toString().padStart(2, '0')
 }
 const toTime = (time) => {
-  let hours = Math.floor(time / 3600)
-  let minutes = Math.floor((time % 3600) / 60)
-  let seconds = Math.floor(time % 60)
+  const hours = Math.floor(time / 3600)
+  const minutes = Math.floor((time % 3600) / 60)
+  const seconds = Math.floor(time % 60)
   // let milliseconds = Math.floor((time % 1) * 1000)
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`//.${pad(milliseconds)}`
 }

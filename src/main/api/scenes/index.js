@@ -4,7 +4,7 @@ const defaultOpts = {
 
 // split cues into scenes wherever a silent gap exceeds the threshold
 const findGaps = (cues, options = {}) => {
-  let opts = { ...defaultOpts, ...options }
+  const opts = { ...defaultOpts, ...options }
   const scenes = []
   let current = []
 

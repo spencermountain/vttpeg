@@ -2,7 +2,7 @@ import test from 'tape';
 import vttpeg from '../src/index.js';
 
 test('label', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 1
 00:00:22.230 --> 00:00:24.606
@@ -19,7 +19,7 @@ This is the third
 00:00:36.000 --> 00:00:37.000
 This is the fourth
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   t.equal(vtt.json().length, 4, '4 entries')
   t.equal(vtt.isValid(), true, 'is valid')
   t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')

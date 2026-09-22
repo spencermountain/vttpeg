@@ -2,7 +2,7 @@
 
 // decode a numeric character reference, eg &#39; or &#x27;
 const fromCharCode = (match, num, radix) => {
-  let code = parseInt(num, radix)
+  const code = parseInt(num, radix)
   if (isNaN(code) || code < 0 || code > 0x10ffff) {
     return match
   }

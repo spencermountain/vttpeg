@@ -3,7 +3,7 @@ import test from 'tape'
 import vttpeg from '../src/index.js'
 
 test('fixOverlaps', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:02.000 --> 00:00:05.000
 This cue appears first.
@@ -16,7 +16,7 @@ This cue overlaps with the first one.
 00:00:08.000 --> 00:00:10.000
 This is a final cue.
   `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   t.equal(vtt.json().length, 3, '3 entries')
   t.equal(vtt.lint({ silent: true }).length, 1, '1 lint error')
 
@@ -27,7 +27,7 @@ This is a final cue.
 })
 
 test('normalize sorts out-of-order cues instead of dropping them', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:10.000 --> 00:00:12.000
 this cue is second
@@ -38,7 +38,7 @@ this cue is first
 00:00:20.000 --> 00:00:22.000
 this cue is third
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   vtt.normalize()
   t.equal(vtt.json().length, 3, 'all 3 cues kept')
   t.deepEqual(
@@ -51,7 +51,7 @@ this cue is third
 })
 
 test('simultaneous cues survive normalize', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:01.000 --> 00:00:04.000
 top line
@@ -59,7 +59,7 @@ top line
 00:00:01.000 --> 00:00:04.000
 bottom line
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   vtt.normalize()
   t.equal(vtt.json().length, 2, 'both cues kept')
   t.deepEqual(

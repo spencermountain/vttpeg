@@ -2,7 +2,7 @@ import test from 'tape';
 import vttpeg from '../src/index.js';
 
 test('style', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:01.000 --> 00:00:05.000
 This text should be <b>bold</b>.
@@ -19,7 +19,7 @@ This is <c.highlight>a highlighted class</c> and this is <lang en-us>English</la
 00:00:21.000 --> 00:00:25.000
 This is karaoke style: <00:00:22.500>Syllable 1, <00:00:23.500>Syllable 2.
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   t.equal(vtt.json().length, 5, '5 entries')
   t.equal(vtt.isValid(), true, 'is valid')
   t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
@@ -29,7 +29,7 @@ This is karaoke style: <00:00:22.500>Syllable 1, <00:00:23.500>Syllable 2.
 
 
 test('cue-settings', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:02.000 --> 00:00:04.000 align:start
 This cue should be aligned to the start (left).
@@ -50,7 +50,7 @@ should
 be
 vertical.
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   t.equal(vtt.json().length, 5, '5 entries')
   t.equal(vtt.isValid(), true, 'is valid')
   t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')

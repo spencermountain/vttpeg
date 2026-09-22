@@ -6,7 +6,7 @@ import splitScenes from './api/scenes/index.js'
 class Vtt {
   constructor(txt = '') {
     this.input = txt
-    let { cues, hasHours } = parse(txt)
+    const { cues, hasHours } = parse(txt)
     this.cues = new Cues(cues, hasHours)
   }
   // warnings about possible vtt problems
@@ -61,11 +61,11 @@ class Vtt {
   }
   // compare former and current vtt content
   diffHtml() {
-    let output = this.out()
+    const output = this.out()
     return diffHtml(this.input, output)
   }
   diffCli() {
-    let output = this.out()
+    const output = this.out()
     return diffCli(this.input, output)
   }
 }

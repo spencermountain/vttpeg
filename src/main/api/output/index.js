@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 import toVtt from './toVtt.js'
 import stats from './stats.js'
 

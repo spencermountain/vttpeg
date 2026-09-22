@@ -15,11 +15,11 @@ const pad3 = (num) => {
 
 const toTime = (int, opts) => {
   // work in whole milliseconds to avoid floating-point drift
-  let totalMs = Math.round(int * 1000)
-  let hours = Math.floor(totalMs / 3600000)
-  let minutes = Math.floor((totalMs % 3600000) / 60000)
-  let seconds = Math.floor((totalMs % 60000) / 1000)
-  let milliseconds = totalMs % 1000
+  const totalMs = Math.round(int * 1000)
+  const hours = Math.floor(totalMs / 3600000)
+  const minutes = Math.floor((totalMs % 3600000) / 60000)
+  const seconds = Math.floor((totalMs % 60000) / 1000)
+  const milliseconds = totalMs % 1000
   // hours are mandatory once non-zero, otherwise follow the file's style
   let out = ''
   if (hours !== 0 || opts.showZeroHours) {
@@ -29,10 +29,10 @@ const toTime = (int, opts) => {
 }
 
 const toVtt = (cues, options = {}) => {
-  let opts = { ...defaultOptions, ...options }
+  const opts = { ...defaultOptions, ...options }
   let txt = 'WEBVTT\n\n'
   for (let i = 0; i < cues.length; i++) {
-    let entry = cues[i]
+    const entry = cues[i]
     if (entry.label) {
       txt += `${entry.label}\n`
     }

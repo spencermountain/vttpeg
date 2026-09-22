@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 import vttpeg from '../src/index.js'
 import yargs from 'yargs'
 import fs from 'fs'
@@ -8,7 +8,7 @@ import pkg from '../package.json' with { type: 'json' }
 
 import { hideBin } from 'yargs/helpers'
 import getFiles from './getFiles.js'
-let options = {
+const options = {
   lint: false,
   overwrite: false,
   shift: 0,
@@ -26,7 +26,7 @@ const confirm = async (question) => {
   return /^y(es)?$/i.test(answer.trim())
 }
 
-let cli = yargs(hideBin(process.argv.slice(2)))
+const cli = yargs(hideBin(process.argv.slice(2)))
   .option('lint', {
     type: 'boolean',
     description: 'lint the file',
@@ -91,20 +91,20 @@ if (cli.help) {
   process.exit(0)
 }
 
-let input = cli._[0]
+const input = cli._[0]
 if (input === undefined || input === '') {
   console.error(`Usage: vttpeg <file|directory|glob> [options]`)
   console.error(`  try 'vttpeg --help' for more information`)
   process.exit(1)
 }
-let files = getFiles(input)
+const files = getFiles(input)
 console.log(`\n\nProcessing ${files.length} vtt files...\n\n`)
 
 for (let i = 0; i < files.length; i += 1) {
-  let txt = fs.readFileSync(files[i], 'utf8')
-  let vtt = vttpeg(txt)
+  const txt = fs.readFileSync(files[i], 'utf8')
+  const vtt = vttpeg(txt)
   if (cli.lint) {
-    let lint = vtt.lint()
+    const lint = vtt.lint()
     if (lint.length > 0) {
       console.log(`Lint errors: ${files[i]}`)
       console.log(lint)
@@ -129,7 +129,7 @@ for (let i = 0; i < files.length; i += 1) {
 
   // interactive: show a diff and confirm before overwriting
   if (cli.interactive) {
-    let output = vtt.out()
+    const output = vtt.out()
     // nothing would change on disk - skip it
     if (txt.trim() === output) {
       console.log(`\n${files[i]}\n  no changes`)
@@ -137,7 +137,7 @@ for (let i = 0; i < files.length; i += 1) {
     }
     console.log(`\n${files[i]}`)
     vtt.diffCli() // prints a coloured diff of input vs output
-    let yes = await confirm('  write these changes? (y/N) ')
+    const yes = await confirm('  write these changes? (y/N) ')
     if (yes) {
       fs.writeFileSync(files[i], output)
       console.log(`  ✓ saved`)
@@ -149,7 +149,7 @@ for (let i = 0; i < files.length; i += 1) {
 
   // should we write a new file?
   if (cli.overwrite || cli.shift || cli.normalize) {
-    let parsed = path.parse(files[i])
+    const parsed = path.parse(files[i])
     // only slice-off the final extension - 'My.Show.S01E01.vtt' keeps its dots
     let newFilename = `${parsed.name}${cli.append || ''}${parsed.ext}`
     if (cli.overwrite) {
@@ -157,7 +157,7 @@ for (let i = 0; i < files.length; i += 1) {
     }
     // set it in the same directory as the original file
     newFilename = path.join(path.dirname(files[i]), newFilename)
-    let output = vtt.out()
+    const output = vtt.out()
     fs.writeFileSync(newFilename, output)
     console.log(`Written to: ${newFilename}`)
   }

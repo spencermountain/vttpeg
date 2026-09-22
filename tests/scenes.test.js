@@ -18,7 +18,7 @@ d
 `
 
 test('scenes splits on a silent gap', (t) => {
-  let scenes = vttpeg(text).scenes()
+  const scenes = vttpeg(text).scenes()
   t.equal(scenes.length, 2, 'two scenes')
   t.equal(scenes[0].json().length, 2, 'first scene has 2 cues')
   t.equal(scenes[1].json().length, 2, 'second scene has 2 cues')
@@ -26,15 +26,15 @@ test('scenes splits on a silent gap', (t) => {
 })
 
 test('scenes keeps every cue (none dropped)', (t) => {
-  let scenes = vttpeg(text).scenes()
-  let total = scenes.reduce((n, s) => n + s.json().length, 0)
+  const scenes = vttpeg(text).scenes()
+  const total = scenes.reduce((n, s) => n + s.json().length, 0)
   t.equal(total, 4, 'all 4 cues accounted for')
   t.equal(scenes[1].json()[1].text[0], 'd', 'final cue is present')
   t.end()
 })
 
 test('scenes returns usable Cues instances', (t) => {
-  let scene = vttpeg(text).scenes()[0]
+  const scene = vttpeg(text).scenes()[0]
   t.ok(scene.out().startsWith('WEBVTT'), 'out() works on a scene')
   t.equal(scene.text(), 'a\nb', 'text() works on a scene')
   t.end()

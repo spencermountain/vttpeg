@@ -2,7 +2,7 @@ import vttpeg from './src/main/index.js'
 import fs from 'fs'
 import path from 'path'
 
-let txt = `WEBVTT
+const txt = `WEBVTT
 
 00:08.279 --> 00:10.903
 ["AULD LANG SYNE" PLAYING]
@@ -38,7 +38,7 @@ NARRATOR: <i>On February 23, 1960,</i>
 
 // const inputFile = '/Volumes/4TB/subtitles/tv-shows/Simpsons/S01/1x12 - Krusty Gets Busted.vtt'
 // let txt = fs.readFileSync(inputFile, 'utf8')
-let vtt = vttpeg(txt)
+const vtt = vttpeg(txt)
 vtt.normalize()
 vtt.lint({ verbose: true })
 // let scenes = vtt.scenes()

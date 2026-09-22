@@ -8,9 +8,9 @@ function parseTimestamp(timestamp = '') {
   let milliseconds = 0
 
   // tolerate SRT-style comma decimals (00:00:01,500)
-  let [before, after] = timestamp.replace(',', '.').split('.')
+  const [before, after] = timestamp.replace(',', '.').split('.')
 
-  let parts = before.split(':')
+  const parts = before.split(':')
   seconds = parseInt(parts.pop() || '0', 10)
   minutes = parseInt(parts.pop() || '0', 10)
   hours = parseInt(parts.pop() || '0', 10)

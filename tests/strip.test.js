@@ -1,8 +1,8 @@
-import test from 'tape';
-import vttpeg from '../src/index.js';
+import test from 'tape'
+import vttpeg from '../src/index.js'
 
 test('strip voices', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 00:16.000 --> 00:18.000
 <v Roger Bingham>from the American Museum of Natural History
 
@@ -22,25 +22,24 @@ NOTE he says this in the intro
 <v Roger Bingham>Thank you for walking down here.
 
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   t.equal(vtt.json().length, 5, '5 entries')
   t.equal(vtt.isValid(), true, 'is valid')
   t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
-  let firstOut = `<v Roger Bingham>from the American Museum of Natural History
+  const firstOut = `<v Roger Bingham>from the American Museum of Natural History
 <v Roger Bingham>And with me is Neil deGrasse Tyson
 <v Roger Bingham>Astrophysicist, Director of the Hayden Planetarium
 <v Roger Bingham>at the AMNH.
 <v Roger Bingham>Thank you for walking down here.`
   t.equal(vtt.text(), firstOut, 'text is text')
 
-
   vtt.normalize({ stripVoice: true })
   t.equal(vtt.json().length, 5, '5 entries')
   t.equal(vtt.isValid(), true, 'is valid')
   t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
-  let secondOut = `from the American Museum of Natural History
+  const secondOut = `from the American Museum of Natural History
 And with me is Neil deGrasse Tyson
 Astrophysicist, Director of the Hayden Planetarium
 at the AMNH.
@@ -50,17 +49,17 @@ Thank you for walking down here.`
 })
 
 test('strip music', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 00:16.000 --> 00:18.000
 -♪ The Mighty Boosh ♪
 -♪ Come with us to the Mighty Boosh ♪
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   t.equal(vtt.json().length, 1, '1 entry')
   t.equal(vtt.isValid(), true, 'is valid')
   t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
-  let firstOut = `-♪ The Mighty Boosh ♪
+  const firstOut = `-♪ The Mighty Boosh ♪
 -♪ Come with us to the Mighty Boosh ♪`
   t.equal(vtt.text(), firstOut, 'text is text')
 
@@ -72,7 +71,7 @@ test('strip music', (t) => {
 })
 
 test('strip bracketed sound cues', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 00:16.000 --> 00:18.000
 [ELECTRONIC SQUELCHES, HUMMING]
 
@@ -82,7 +81,7 @@ test('strip bracketed sound cues', (t) => {
 00:20.000 --> 00:22.000
 Actual dialogue here.
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   t.equal(vtt.json().length, 3, '3 entries')
 
   vtt.normalize({ stripSfx: true })
@@ -92,7 +91,7 @@ Actual dialogue here.
 })
 
 test('stripMusic and stripSfx are independent', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 00:16.000 --> 00:18.000
 ♪ Don't stop believin' ♪
 
@@ -100,13 +99,13 @@ test('stripMusic and stripSfx are independent', (t) => {
 [door creaks]
 `
   // keep lyrics, drop sound effects
-  let a = vttpeg(text)
+  const a = vttpeg(text)
   a.normalize({ stripMusic: false, stripSfx: true })
   t.equal(a.json().length, 1, 'sfx cue dropped')
   t.equal(a.text(), `♪ Don't stop believin' ♪`, 'lyrics kept')
 
   // keep sound effects, drop lyrics
-  let b = vttpeg(text)
+  const b = vttpeg(text)
   b.normalize({ stripMusic: true, stripSfx: false })
   t.equal(b.json().length, 1, 'music cue dropped')
   t.equal(b.text(), `[door creaks]`, 'sfx kept')
@@ -114,7 +113,7 @@ test('stripMusic and stripSfx are independent', (t) => {
 })
 
 test('stripInlineSfx removes mid-line sound cues', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 00:16.000 --> 00:18.000
 I'm fine. [SNIFFLES] Really.
 
@@ -124,7 +123,7 @@ Hey [BANG] watch out!
 00:20.000 --> 00:22.000
 [SIGHING]
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   // off by default, so whole-line stays for stripSfx; turn off stripSfx to isolate
   vtt.normalize({ stripInlineSfx: true, stripSfx: false })
   t.deepEqual(
@@ -136,18 +135,18 @@ Hey [BANG] watch out!
 })
 
 test('stripInlineSfx is off by default', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 00:16.000 --> 00:18.000
 I went home (finally) and slept.
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   vtt.normalize()
   t.equal(vtt.text(), 'I went home (finally) and slept.', 'asides preserved by default')
   t.end()
 })
 
 test('stripSpeakerLabels keeps the dialogue', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 00:16.000 --> 00:18.000
 [JOHN] I'm leaving.
 
@@ -157,7 +156,7 @@ test('stripSpeakerLabels keeps the dialogue', (t) => {
 00:20.000 --> 00:22.000
 [door creaks]
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   // off by default: labels and whole-line sfx both present pre-normalize
   vtt.normalize({ stripSpeakerLabels: true, stripSfx: false })
   t.equal(vtt.json().length, 3, '3 entries kept')
@@ -170,7 +169,7 @@ test('stripSpeakerLabels keeps the dialogue', (t) => {
 })
 
 test('stripMetadata removes the whole json payload', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 1
 00:00:00.100 --> 00:00:07.342
@@ -182,7 +181,7 @@ test('stripMetadata removes the whole json payload', (t) => {
 00:00:08.000 --> 00:00:09.000
 Actual dialogue.
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   vtt.normalize()
   t.equal(vtt.json().length, 1, 'metadata cue dropped entirely')
   t.equal(vtt.text(), 'Actual dialogue.', 'no json left behind')
@@ -191,12 +190,12 @@ Actual dialogue.
 
 test('strip whitespace', (t) => {
   // extra internal spaces, a trailing space, and a blank line
-  let text = `WEBVTT
+  const text = `WEBVTT
 00:22.908 --> 00:24.535
 Linda  Johnson is
 a political liability.
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   t.equal(vtt.json().length, 1, '1 entry')
   t.equal(vtt.isValid(), true, 'is valid')
   t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
@@ -207,13 +206,13 @@ a political liability.
   t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
   // whitespace collapsed/trimmed, but the line-break is preserved
-  let secondOut = `Linda Johnson is\na political liability.`
+  const secondOut = `Linda Johnson is\na political liability.`
   t.equal(vtt.text(), secondOut, 'lines are trimmed but preserved')
   t.end()
 })
 
 test('strip notes', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 1
 00:00:22.230 --> 00:00:24.606
@@ -227,7 +226,7 @@ This is the second.
 00:00:34.159 --> 00:00:35.743
 This is the third
 `
-  let vtt = vttpeg(text)
+  const vtt = vttpeg(text)
   t.equal(vtt.json().length, 3, '3 entries')
   t.equal(vtt.isValid(), true, 'is valid')
   t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
@@ -236,7 +235,7 @@ This is the third
   t.equal(vtt.isValid(), true, 'is valid')
   t.equal(vtt.lint({ silent: true }).length, 0, 'no lint errors')
 
-  let secondOut = `This is the first subtitle.
+  const secondOut = `This is the first subtitle.
 This is the second.
 This is the third`
   t.equal(vtt.text(), secondOut, 'text is text')

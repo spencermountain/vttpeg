@@ -5,20 +5,20 @@ import vttpeg from '../src/index.js'
 const dur = (cue) => Math.round((cue.endTime - cue.startTime) * 1000) / 1000
 
 test('minDuration extends a short final cue', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:01.000 --> 00:00:01.500
 Quick!
 `
-  let vtt = vttpeg(text).minDuration(3)
-  let cue = vtt.json()[0]
+  const vtt = vttpeg(text).minDuration(3)
+  const cue = vtt.json()[0]
   t.equal(cue.startTime, 1, 'start unchanged')
   t.equal(dur(cue), 3, 'extended to 3s (no next cue to block it)')
   t.end()
 })
 
 test('minDuration grows only into the available gap', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:01.000 --> 00:00:02.000
 First
@@ -27,14 +27,14 @@ First
 Second
 `
   // first cue wants 3s (-> 4.0) but the next starts at 3.5, so it caps there
-  let vtt = vttpeg(text).minDuration(3)
+  const vtt = vttpeg(text).minDuration(3)
   t.equal(vtt.json()[0].endTime, 3.5, 'capped at next cue start')
   t.equal(vtt.json()[1].endTime, 7, 'second cue already long enough, untouched')
   t.end()
 })
 
 test('minDuration makes no change when there is no room', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:01.000 --> 00:00:02.000
 First
@@ -43,54 +43,54 @@ First
 Second
 `
   // first cue touches the second - no gap to grow into
-  let vtt = vttpeg(text).minDuration(3)
+  const vtt = vttpeg(text).minDuration(3)
   t.equal(vtt.json()[0].endTime, 2, 'left unchanged - no room')
   t.end()
 })
 
 test('minDuration leaves already-long cues alone', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:01.000 --> 00:00:06.000
 Plenty long
 `
-  let vtt = vttpeg(text).minDuration(3)
+  const vtt = vttpeg(text).minDuration(3)
   t.equal(vtt.json()[0].endTime, 6, 'unchanged')
   t.end()
 })
 
 test('maxDuration trims a long cue', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:01.000 --> 00:00:09.000
 Lingering...
 `
-  let vtt = vttpeg(text).maxDuration(4)
-  let cue = vtt.json()[0]
+  const vtt = vttpeg(text).maxDuration(4)
+  const cue = vtt.json()[0]
   t.equal(cue.startTime, 1, 'start unchanged')
   t.equal(cue.endTime, 5, 'trimmed to 4s')
   t.end()
 })
 
 test('maxDuration leaves short cues alone', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:01.000 --> 00:00:02.000
 Brief
 `
-  let vtt = vttpeg(text).maxDuration(4)
+  const vtt = vttpeg(text).maxDuration(4)
   t.equal(vtt.json()[0].endTime, 2, 'unchanged')
   t.end()
 })
 
 test('min/maxDuration are chainable', (t) => {
-  let text = `WEBVTT
+  const text = `WEBVTT
 
 00:00:01.000 --> 00:00:01.200
 Hi
 `
-  let out = vttpeg(text).minDuration(2).maxDuration(5).shift(1)
-  let cue = out.json()[0]
+  const out = vttpeg(text).minDuration(2).maxDuration(5).shift(1)
+  const cue = out.json()[0]
   t.equal(cue.startTime, 2, 'shifted')
   t.equal(cue.endTime, 4, 'min applied then shifted')
   t.end()
