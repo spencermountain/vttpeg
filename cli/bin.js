@@ -1,4 +1,4 @@
- 
+#!/usr/bin/env node
 import vttpeg from '../src/index.js'
 import yargs from 'yargs'
 import fs from 'fs'

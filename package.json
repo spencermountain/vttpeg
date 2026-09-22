@@ -2,19 +2,11 @@
   "name": "vttpeg",
   "version": "0.0.6",
   "description": "utility for managing subtitles in vtt format",
-  "scripts": {
-    "build": "rollup -c --silent",
-    "test": "tape \"tests/*.test.js\" | tap-dancer",
-    "watch": "node --watch scratch.js",
-    "check:types": "npm run build && attw --pack . && tsc -p tests/types/tsconfig.json",
-    "lint": "eslint ."
-  },
+  "license": "MIT",
+  "repository": "github:spencermountain/vttpeg",
   "homepage": "https://work.spencermountain.dev/vttpeg",
   "author": "Spencer Kelly <spencermountain@gmail.com> (https://spencermountain.dev)",
-  "bin": {
-    "vttpeg": "cli/bin.js"
-  },
-  "main": "builds/vttpeg.cjs",
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -27,26 +19,32 @@
       }
     }
   },
-  "types": "types/index.d.cts",
-  "module": "builds/vttpeg.mjs",
-  "unpkg": "builds/vttpeg.mjs",
-  "type": "module",
-  "repository": "github:spencermountain/vttpeg",
-  "files": [
-    "src",
-    "builds",
-    "types"
-  ],
+  "main": "./builds/vttpeg.cjs",
+  "module": "./builds/vttpeg.mjs",
+  "types": "./types/index.d.cts",
+  "bin": {
+    "vttpeg": "./cli/bin.js"
+  },
+  "sideEffects": false,
   "engines": {
     "node": ">=20"
   },
-  "prettier": {
-    "trailingComma": "none",
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true,
-    "printWidth": 100
+  "scripts": {
+    "build": "rollup -c --silent",
+    "test": "tape \"tests/*.test.js\" | tap-dancer",
+    "watch": "node --watch scratch.js",
+    "check:types": "npm run build && attw --pack . && tsc -p tests/types/tsconfig.json",
+    "lint": "eslint ."
   },
+  "files": [
+    "builds",
+    "src",
+    "types"
+  ],
+  "keywords": [
+    "vtt",
+    "subtitle"
+  ],
   "dependencies": {
     "glob": "13.0.6",
     "same-diff": "^0.0.2",
@@ -64,5 +62,12 @@
     "tape": "^5.10.2",
     "typescript": "^7.0.2"
   },
-  "license": "MIT"
+  "unpkg": "builds/vttpeg.mjs",
+  "prettier": {
+    "trailingComma": "none",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 100
+  }
 }
