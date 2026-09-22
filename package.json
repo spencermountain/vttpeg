@@ -50,7 +50,7 @@
   "dependencies": {
     "glob": "13.0.6",
     "same-diff": "^0.0.2",
-    "yargs": "18.1.0"
+    "yargs": "18.2.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "29.0.3",
