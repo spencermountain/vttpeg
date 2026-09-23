@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import vttpeg from '../src/index.js'
 import yargs from 'yargs'
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import readline from 'node:readline/promises'
 import pkg from '../package.json' with { type: 'json' }
 
