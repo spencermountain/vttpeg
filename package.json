@@ -27,10 +27,11 @@
   },
   "sideEffects": false,
   "engines": {
-    "node": ">=20"
+    "node": ">=18"
   },
   "scripts": {
-    "build": "rollup -c --silent",
+    "build": "node ./scripts/version.js && rollup -c --silent",
+    "version": "node ./scripts/version.js",
     "test": "tape \"tests/*.test.js\" | tap-dancer",
     "watch": "node --watch scratch.js",
     "check:types": "npm run build && attw --pack . && tsc -p tests/types/tsconfig.json",

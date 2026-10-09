@@ -2,6 +2,8 @@
 declare function vttpeg(txt?: string): vttpeg.Vtt
 
 declare namespace vttpeg {
+  export const version: string
+
   // Type definitions for vttpeg
   // Project: https://github.com/spencermountain/vttpeg
   // A utility for managing subtitles in vtt format
